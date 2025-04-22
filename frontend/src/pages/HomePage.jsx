@@ -69,28 +69,30 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl p-4">
+    <div>
       <Header />
-      <ControlsBar onSearch={handleSearch} onFilter={handleFilter} />
-      {loading ? (
-        <p>Loading countries...</p>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {countries.map((country) => (
-            <CountryCard
-              key={country.cca3}
-              code={country.cca3}
-              flag={country.flags.svg}
-              name={country.name.common}
-              population={country.population.toLocaleString()}
-              region={country.region}
-              capital={country.capital?.[0] || 'N/A'}
-            />
-          ))}
-        </div>
-      )}
+      <div className="mx-auto">
+        <ControlsBar onSearch={handleSearch} onFilter={handleFilter} />
+        {loading ? (
+          <p>Loading countries...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 px-4 mt-8">
+            {countries.map((country) => (
+              <CountryCard
+                key={country.cca3}
+                code={country.cca3}
+                flag={country.flags.svg}
+                name={country.name.common}
+                population={country.population.toLocaleString()}
+                region={country.region}
+                capital={country.capital?.[0] || 'N/A'}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
