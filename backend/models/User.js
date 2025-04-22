@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  favorites: {
+    type: [String], 
+    default: [],
+  },
 });
 
 module.exports = mongoose.model('User', UserSchema);

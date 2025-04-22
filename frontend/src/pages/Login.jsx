@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 import { loginUser } from '../services/auth';
+import { getFavorites } from '../services/favorites';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -18,6 +19,10 @@ export default function Login() {
             // Save to localStorage
             localStorage.setItem('token', token);
             localStorage.setItem('user', name);
+
+            //Sync backend favorites to localStorage
+            const backendFavorites = await getFavorites();
+            localStorage.setItem('favorites', JSON.stringify(backendFavorites));
 
             navigate('/'); // redirect to home
         } catch (err) {
@@ -54,7 +59,7 @@ export default function Login() {
                 </button>
 
                 <p className="text-sm text-center mt-4">
-                    Don’t have an account? <a href="/register" className="text-blue-600 underline">Register here</a>
+                    Don’t have an account? <Link to="/register" className="text-blue-600 underline">Register here</Link>
                 </p>
 
             </form>

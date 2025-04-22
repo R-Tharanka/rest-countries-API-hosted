@@ -63,15 +63,64 @@ router.post('/login', async (req, res) => {
 
 // @route GET /api/auth/user
 router.get('/user', authMiddleware, async (req, res) => {
-    try {
-      const user = await User.findById(req.user.userId).select('-password');
-      if (!user) return res.status(404).json({ message: 'User not found' });
-  
-      res.json(user);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Server error' });
+  try {
+    const user = await User.findById(req.user.userId).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST /api/auth/favorites
+router.post('/favorites', authMiddleware, async (req, res) => {
+  const { code } = req.body;
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (!user.favorites.includes(code)) {
+      user.favorites.push(code);
+      await user.save();
     }
-  });
+
+    res.json({ favorites: user.favorites });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+// DELETE /api/auth/favorites/:code
+router.delete('/favorites/:code', authMiddleware, async (req, res) => {
+  const { code } = req.params;
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.favorites = user.favorites.filter(fav => fav !== code);
+    await user.save();
+
+    res.json({ favorites: user.favorites });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+// GET /api/auth/favorites
+router.get('/favorites', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('favorites');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ favorites: user.favorites });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 module.exports = router;
