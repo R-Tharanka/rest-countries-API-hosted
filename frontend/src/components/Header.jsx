@@ -33,26 +33,32 @@ export default function Header() {
           Login
         </Link>
       ) : (
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="px-4 py-2 rounded shadow hover:bg-gray-100"
-          >
-            👤
-          </button>
-
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10">
-              <p className="px-4 py-2 border-b">👋 Hello, {user}</p>
-              <button
-                className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </div>
-          )}
+        <div className="flex items-center gap-4">
+          <Link to="/favorites" className="px-4 py-2 rounded shadow hover:bg-gray-100">
+            Favorites
+          </Link>
+          {/* Profile dropdown below */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="px-4 py-2 rounded shadow hover:bg-gray-100"
+            >
+              👤
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10">
+                <p className="px-4 py-2 border-b">👋 Hello, {user}</p>
+                <button
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
+
       )}
     </header>
   );

@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import CountryDetail from './pages/CountryDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Favorites from './pages/Favorites';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/country/:code" element={<CountryDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/favorites" element={<Favorites />} />
       </Routes>
     </BrowserRouter>
   );
