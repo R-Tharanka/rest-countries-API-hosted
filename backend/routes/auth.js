@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -59,5 +60,18 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+// @route GET /api/auth/user
+router.get('/user', authMiddleware, async (req, res) => {
+    try {
+      const user = await User.findById(req.user.userId).select('-password');
+      if (!user) return res.status(404).json({ message: 'User not found' });
+  
+      res.json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
 
 module.exports = router;
