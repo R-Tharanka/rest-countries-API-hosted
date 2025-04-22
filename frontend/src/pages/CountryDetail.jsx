@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchByAlpha } from '../services/countries';
 import Header from '../components/Header';
+import { addFavorite, removeFavorite } from '../services/favorites';
 
 export default function CountryDetail() {
     const { code } = useParams();
@@ -58,8 +59,10 @@ export default function CountryDetail() {
 
                                 if (isFavorite) {
                                     updatedFavorites = favorites.filter(fav => fav !== code);
+                                    removeFavorite(code); // sync backend
                                 } else {
                                     updatedFavorites = [...favorites, code];
+                                    addFavorite(code); // sync backend
                                 }
 
                                 localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
