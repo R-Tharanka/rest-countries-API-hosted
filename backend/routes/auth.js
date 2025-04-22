@@ -76,7 +76,13 @@ router.get('/user', authMiddleware, async (req, res) => {
 
 // POST /api/auth/favorites
 router.post('/favorites', authMiddleware, async (req, res) => {
+  console.log(' POST /favorites request body:', req.body);
+  console.log(' Authenticated user:', req.user);
+
   const { code } = req.body;
+
+  if (!code) return res.status(400).json({ message: 'Missing country code' });
+
   try {
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -88,6 +94,7 @@ router.post('/favorites', authMiddleware, async (req, res) => {
 
     res.json({ favorites: user.favorites });
   } catch (err) {
+    console.error('POST /favorites error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -95,7 +102,14 @@ router.post('/favorites', authMiddleware, async (req, res) => {
 
 // DELETE /api/auth/favorites/:code
 router.delete('/favorites/:code', authMiddleware, async (req, res) => {
+
+  console.log(' DELETE /favorites request body:', req.body);
+  console.log(' Authenticated user:', req.user);
+
   const { code } = req.params;
+
+  if (!code) return res.status(400).json({ message: 'Missing country code' });
+
   try {
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -105,6 +119,7 @@ router.delete('/favorites/:code', authMiddleware, async (req, res) => {
 
     res.json({ favorites: user.favorites });
   } catch (err) {
+    console.error(' DELETE /favorites error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });

@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ControlsBar({ onSearch, onFilter }) {
   return (
-    <div class="md:h-[180px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end
+    <div className="md:h-[180px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end
     lg:h-[180px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end bg-gray-200">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-evenly my-6">
         <input
