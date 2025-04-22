@@ -41,7 +41,7 @@ export default function CountryDetail() {
         <div>
             <Header />
             <div className="p-4 max-w-4xl mx-auto">
-                <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+                <div className="flex flex-col sm:flex-row justify-between items-center mb-6 mt-4 gap-2">
                     <Link
                         to="/"
                         className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium rounded shadow-sm transition duration-150"
@@ -74,8 +74,8 @@ export default function CountryDetail() {
                 </div>
 
 
-                <h1 className="text-3xl font-bold mb-2">{country.name.official}</h1>
-                <img src={country.flags.svg} alt={`${country.name.common} flag`} className="h-40 w-auto mb-4" />
+                <h1 className="text-3xl font-bold mb-8 mt-8">{country.name.official}</h1>
+                <img src={country.flags.svg} alt={`${country.name.common} flag`} className="h-40 w-auto mb-6" />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <p><strong>Common Name:</strong> {country.name.common}</p>
