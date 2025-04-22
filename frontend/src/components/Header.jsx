@@ -25,7 +25,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="flex items-center justify-between py-4 px-4 bg-white shadow">
+    <header className="sticky top-0 z-50 flex items-center justify-between py-4 px-4 bg-white shadow">
       <Link to="/" className="text-2xl font-bold">REST Countries Explorer</Link>
 
       {!user ? (
