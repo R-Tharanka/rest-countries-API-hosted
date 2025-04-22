@@ -7,11 +7,11 @@ export default function ControlsBar({ onSearch, onFilter }) {
         type="text"
         placeholder="Search for a country..."
         className="w-full md:w-1/3 p-2 border rounded shadow"
-        onChange={e => onSearch(e.target.value)}
+        onChange={(e) => onSearch(e.target.value)}
       />
       <select
         className="w-full md:w-1/6 p-2 border rounded shadow"
-        onChange={e => onFilter(e.target.value)}
+        onChange={(e) => onFilter(e.target.value)}
       >
         <option value="">Filter by Region</option>
         <option value="Africa">Africa</option>
