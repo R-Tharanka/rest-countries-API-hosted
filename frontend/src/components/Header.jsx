@@ -2,7 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
-  const user = localStorage.getItem('user');
+  const [user, setUser] = useState(localStorage.getItem('user'));
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setUser(localStorage.getItem('user'));
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef();
@@ -26,6 +36,15 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between py-4 px-4 bg-white shadow">
+
+      {/* SESSION EXPIRED BANNER */}
+      {!localStorage.getItem('token') && (
+        <div className="w-full text-center bg-yellow-100 text-yellow-800 p-2 text-sm rounded">
+          ⚠️ Session expired. Please log in again.
+        </div>
+      )}
+
+
       <Link to="/" className="text-2xl font-bold">REST Countries Explorer</Link>
 
       {!user ? (
