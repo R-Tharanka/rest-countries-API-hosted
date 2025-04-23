@@ -21,3 +21,21 @@ test('renders country details', () => {
   expect(screen.getByText(/Colombo/i)).toBeInTheDocument();
   expect(screen.getByText(/21,000,000/i)).toBeInTheDocument();
 });
+
+test('renders fallback values when props are missing', () => {
+  render(
+    <BrowserRouter>
+      <CountryCard
+        code=""
+        flag=""
+        name="Unknown"
+        population="0"
+        region="Unknown"
+        capital="Unknown"
+      />
+    </BrowserRouter>
+  );
+
+  expect(screen.getByText(/Unknown/i)).toBeInTheDocument();
+  expect(screen.getByText(/0/i)).toBeInTheDocument();
+});
