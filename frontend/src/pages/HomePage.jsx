@@ -74,9 +74,13 @@ export default function HomePage() {
       <div className="mx-auto">
         <ControlsBar onSearch={handleSearch} onFilter={handleFilter} />
         {loading ? (
-          <p>Loading countries...</p>
+          <div className="flex justify-center py-10">
+            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
         ) : error ? (
           <p className="text-red-500">{error}</p>
+        ) : countries.length === 0 ? (
+          <p className="text-gray-600 text-center py-10">No countries match your search or filter.</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 px-4 mt-8">
             {countries.map((country) => (

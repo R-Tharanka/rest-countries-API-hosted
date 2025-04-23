@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { fetchByAlpha } from '../services/countries';
 import Header from '../components/Header';
 import { addFavorite, removeFavorite } from '../services/favorites';
@@ -50,6 +51,8 @@ export default function CountryDetail() {
 
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       setIsFavorite(!isFavorite);
+
+      toast.success(isFavorite ? 'Removed from favorites' : 'Added to favorites');
     } catch (err) {
       console.error(err.message);
     }
