@@ -2,7 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
-  const user = localStorage.getItem('user');
+  const [user, setUser] = useState(localStorage.getItem('user'));
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setUser(localStorage.getItem('user'));
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef();
