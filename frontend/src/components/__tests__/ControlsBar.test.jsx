@@ -5,7 +5,7 @@ test('renders search and filter controls', () => {
   render(<ControlsBar onSearch={jest.fn()} onFilter={jest.fn()} />);
 
   expect(screen.getByPlaceholderText(/search for a country/i)).toBeInTheDocument();
-  expect(screen.getByText(/filter by region/i)).toBeInTheDocument();
+  expect(screen.getByRole('combobox')).toBeInTheDocument();
 });
 
 test('calls onSearch when typing in search input', () => {
@@ -21,11 +21,10 @@ test('calls onSearch when typing in search input', () => {
 
 test('calls onFilter when selecting a region', () => {
   const onFilterMock = jest.fn();
-  render(<ControlsBar onSearch={jest.fn()} onFilter={onFilterMock} />);
+  render(<ControlsBar onFilter={onFilterMock} onSearch={() => {}} />);
 
-  fireEvent.change(screen.getByText(/filter by region/i), {
-    target: { value: 'Asia' },
-  });
+  const select = screen.getByRole('combobox');
+  fireEvent.change(select, { target: { value: 'Asia' } });
 
   expect(onFilterMock).toHaveBeenCalledWith('Asia');
 });

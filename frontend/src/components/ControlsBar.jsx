@@ -12,7 +12,9 @@ export default function ControlsBar({ onSearch, onFilter }) {
           className="w-full md:w-1/3 p-2 border rounded shadow"
           onChange={(e) => onSearch(e.target.value)}
         />
+        <label htmlFor="region-filter" className="sr-only">Filter by Region</label>
         <select
+          id="region-filter"
           className="w-full md:w-[150px] p-2 border rounded shadow"
           onChange={(e) => onFilter(e.target.value)}
         >
