@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 export default function ControlsBar({ onSearch, onFilter }) {
   return (
