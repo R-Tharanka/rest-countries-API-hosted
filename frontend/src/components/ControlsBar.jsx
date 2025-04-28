@@ -6,13 +6,17 @@ export default function ControlsBar({ onSearch, onFilter }) {
 
   const fullText = 'Explore Countries Around the Globe';
   const [text, setText] = useState('');
+  const [showGlobe, setShowGlobe] = useState(false);
 
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
       setText(fullText.slice(0, index));
       index++;
-      if (index > fullText.length) clearInterval(interval);
+      if (index > fullText.length) {
+        clearInterval(interval);
+        setShowGlobe(true); // Show globe after typing complete
+      }
     }, 50); // typing speed
 
     return () => clearInterval(interval);
@@ -23,12 +27,21 @@ export default function ControlsBar({ onSearch, onFilter }) {
     lg:h-[300px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:bg-gray-200">
 
       <div className="text-center lg:text-left px-4 lg:px-0 mt-12">
-        <h1
-          className="text-3xl sm:text-4xl lg:text-5xl lg:ml-[140px] font-extrabold mb-4"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          {text}
-        </h1>
+        <div className="flex items-center">
+          <h1
+            className="text-3xl sm:text-4xl lg:text-5xl lg:ml-[140px] font-extrabold mb-4"
+            style={{ fontFamily: 'Roboto' }}
+          >
+            {text}
+          </h1>
+          {showGlobe && (
+            <img
+              src="https://loading.io/asset/783628"
+              alt="Globe"
+              className="w-10 h-10 ml-2 animate-spin"
+            />
+          )}
+        </div>
         <p
           className="text-gray-600 text-base sm:text-lg lg:ml-[140px] lg:text-xl max-w-2xl mx-auto lg:mx-0"
           style={{ fontFamily: 'Roboto' }}
