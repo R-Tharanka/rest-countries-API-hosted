@@ -38,11 +38,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 flex items-center justify-between py-4 px-4 bg-white shadow">
 
       {/* SESSION EXPIRED BANNER */}
-      {!localStorage.getItem('token') && (
+      {/* {!localStorage.getItem('token') && (
         <div className="w-full text-center bg-yellow-100 text-yellow-800 p-2 text-sm rounded">
           ⚠️ Session expired. Please log in again.
         </div>
-      )}
+      )} */}
 
 
       <Link to="/" className="text-2xl font-bold">REST Countries Explorer</Link>
