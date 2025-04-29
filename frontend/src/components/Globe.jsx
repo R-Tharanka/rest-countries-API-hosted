@@ -61,7 +61,7 @@ export default function Globe() {
         chart.animate({
             key: "rotationX",
             to: 360,
-            duration: 30000, // 30 seconds for full spin
+            duration: 20000, // 30 seconds for full spin
             loops: Infinity
         });
 
@@ -74,7 +74,7 @@ export default function Globe() {
         <div
             id="chartdiv"
             ref={chartRef}
-            className="md:w-50 md:h-50 lg:w-60 lg:h-60 ml-2"
+            className="md:w-40 md:h-40 lg:w-60 lg:h-60 ml-2"
         />
     );
 
