@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+// import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import Globe from '../components/Globe';
 
 
 export default function ControlsBar({ onSearch, onFilter }) {
@@ -23,24 +24,25 @@ export default function ControlsBar({ onSearch, onFilter }) {
   }, []);
 
   return (
-    <div className="md:h-[280px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end md:bg-gray-200
-    lg:h-[300px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:bg-gray-200">
+    <div className="md:h-[480px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end md:bg-gray-200
+    lg:h-[500px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:bg-gray-200
+    sm:h-[300px]">
 
       <div className="text-center lg:text-left px-4 lg:px-0 mt-12">
-        <div className="flex items-center">
+        <div className="flex flex-col md:flex-row lg:flex-row items-center">
           <h1
             className="text-3xl sm:text-4xl lg:text-5xl lg:ml-[140px] font-extrabold mb-4"
             style={{ fontFamily: 'Roboto' }}
           >
             {text}
           </h1>
+
           {showGlobe && (
-            <img
-              src="https://loading.io/asset/783628"
-              alt="Globe"
-              className="w-10 h-10 ml-2 animate-spin"
-            />
+            <div className="hidden md:block ml-2">
+              <Globe />
+            </div>
           )}
+
         </div>
         <p
           className="text-gray-600 text-base sm:text-lg lg:ml-[140px] lg:text-xl max-w-2xl mx-auto lg:mx-0"
