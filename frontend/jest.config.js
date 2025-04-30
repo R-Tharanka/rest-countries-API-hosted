@@ -1,18 +1,24 @@
-// frontend/jest.config.js
+// Jest configuration file
 module.exports = {
-  // Specifies the test environment to simulate a browser-like environment
+  // Test environment simulating a browser
   testEnvironment: 'jsdom',
 
-  // Directories Jest should use to search for modules
-  moduleDirectories: ['node_modules', 'src'],
+  // Directories for module resolution
+  moduleDirectories: ['node_modules', '<rootDir>/src'], // Ensure Jest resolves modules correctly
 
-  // Maps module names to specific paths for resolving imports
+  // Map module names to specific paths
   moduleNameMapper: {
     '^react-router-dom$': '<rootDir>/node_modules/react-router-dom',
+    '^.+\\.(css|scss|png|jpg|svg)$': 'identity-obj-proxy', // Mock static assets
   },
 
-  // Specifies how files should be transformed before testing
+  // Transform files before testing
   transform: {
-    '^.+\\.jsx?$': 'babel-jest', // Transforms JavaScript and JSX files using Babel
+    '^.+\\.jsx?$': 'babel-jest', // Use Babel for JavaScript and JSX files
   },
+  
+  // Ignore transforming specific node_modules except listed ones
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-router-dom|@amcharts)/)', // Include @amcharts for transformation
+  ],
 };
