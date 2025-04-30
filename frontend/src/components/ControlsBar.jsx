@@ -56,13 +56,13 @@ export default function ControlsBar({ onSearch, onFilter }) {
         <input
           type="text"
           placeholder="Search for a country..."
-          className="w-full md:w-1/3 p-2 border rounded shadow"
+          className="w-full md:w-1/3 p-2 border rounded-[6px] shadow"
           onChange={(e) => onSearch(e.target.value)}
         />
         <label htmlFor="region-filter" className="sr-only">Filter by Region</label>
         <select
           id="region-filter"
-          className="w-full md:w-[150px] p-2 border rounded shadow"
+          className="w-full md:w-[150px] p-2 border rounded-[6px] shadow"
           onChange={(e) => onFilter(e.target.value)}
         >
           <option value="">Filter by Region</option>
