@@ -7,18 +7,20 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 // @route POST /api/auth/register
+// @desc Register a new user
+// @access Public
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // Check if user exists
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already in use' });
 
-    // Hash password
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Create and save the new user
     const newUser = new User({
       name,
       email,
@@ -35,19 +37,21 @@ router.post('/register', async (req, res) => {
 });
 
 // @route POST /api/auth/login
+// @desc Authenticate user and return JWT token
+// @access Public
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find user
+    // Find user by email
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
-    // Compare password
+    // Compare provided password with stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-    // Create JWT token
+    // Generate JWT token
     const token = jwt.sign(
       { userId: user._id, name: user.name },
       process.env.JWT_SECRET,
@@ -62,8 +66,11 @@ router.post('/login', async (req, res) => {
 });
 
 // @route GET /api/auth/user
+// @desc Get authenticated user's details
+// @access Private
 router.get('/user', authMiddleware, async (req, res) => {
   try {
+    // Fetch user details excluding the password
     const user = await User.findById(req.user.userId).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
 
@@ -74,19 +81,23 @@ router.get('/user', authMiddleware, async (req, res) => {
   }
 });
 
-// POST /api/auth/favorites
+// @route POST /api/auth/favorites
+// @desc Add a country code to user's favorites
+// @access Private
 router.post('/favorites', authMiddleware, async (req, res) => {
-  console.log(' POST /favorites request body:', req.body);
-  console.log(' Authenticated user:', req.user);
+  console.log('POST /favorites request body:', req.body);
+  console.log('Authenticated user:', req.user);
 
   const { code } = req.body;
 
   if (!code) return res.status(400).json({ message: 'Missing country code' });
 
   try {
+    // Find the authenticated user
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
+    // Add the country code to favorites if not already present
     if (!user.favorites.includes(code)) {
       user.favorites.push(code);
       await user.save();
@@ -99,35 +110,39 @@ router.post('/favorites', authMiddleware, async (req, res) => {
   }
 });
 
-
-// DELETE /api/auth/favorites/:code
+// @route DELETE /api/auth/favorites/:code
+// @desc Remove a country code from user's favorites
+// @access Private
 router.delete('/favorites/:code', authMiddleware, async (req, res) => {
-
-  console.log(' DELETE /favorites request body:', req.body);
-  console.log(' Authenticated user:', req.user);
+  console.log('DELETE /favorites request body:', req.body);
+  console.log('Authenticated user:', req.user);
 
   const { code } = req.params;
 
   if (!code) return res.status(400).json({ message: 'Missing country code' });
 
   try {
+    // Find the authenticated user
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
+    // Remove the country code from favorites
     user.favorites = user.favorites.filter(fav => fav !== code);
     await user.save();
 
     res.json({ favorites: user.favorites });
   } catch (err) {
-    console.error(' DELETE /favorites error:', err);
+    console.error('DELETE /favorites error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-
-// GET /api/auth/favorites
+// @route GET /api/auth/favorites
+// @desc Get the list of user's favorite country codes
+// @access Private
 router.get('/favorites', authMiddleware, async (req, res) => {
   try {
+    // Fetch user's favorites
     const user = await User.findById(req.user.userId).select('favorites');
     if (!user) return res.status(404).json({ message: 'User not found' });
 
@@ -136,6 +151,5 @@ router.get('/favorites', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
 
 module.exports = router;
