@@ -1,9 +1,12 @@
 export function handleAuthError(navigate, setSessionExpired) {
-    // Clean up and redirect
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('favorites');
-    setSessionExpired(true); // flag to show session expired banner
-    navigate('/login');
-  }
-  
+  // Remove authentication-related data from local storage
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('favorites');
+
+  // Set session expired flag to display a notification or banner
+  setSessionExpired(true);
+
+  // Redirect the user to the login page
+  navigate('/login');
+}
