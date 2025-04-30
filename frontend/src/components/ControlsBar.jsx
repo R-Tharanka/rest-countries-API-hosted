@@ -1,38 +1,36 @@
 import React, { useState, useEffect } from 'react';
-// import Globe component for rendering the globe animation
 import Globe from '../components/Globe';
 
 export default function ControlsBar({ onSearch, onFilter }) {
+  const [region, setRegion] = useState(''); // State for selected region filter
+  const [language, setLanguage] = useState(''); // State for selected language filter
+  const fullText = 'Explore Countries Around the Globe'; // Full text for the typing effect
+  const [text, setText] = useState(''); // State for dynamically typed text
+  const [showGlobe, setShowGlobe] = useState(false); // State to control Globe component visibility
 
-  const [region, setRegion] = useState('');
-  const [language, setLanguage] = useState('');
-
-  // Full text to be displayed with typing effect
-  const fullText = 'Explore Countries Around the Globe';
-  const [text, setText] = useState(''); // State to hold the current text being typed
-  const [showGlobe, setShowGlobe] = useState(false); // State to control the visibility of the Globe component
-
+  // Handle region filter change and trigger onFilter callback
   const handleRegionChange = (value) => {
     setRegion(value);
-    onFilter(value, language); // Pass both region and language
+    onFilter(value, language); // Pass updated region and current language to parent
   };
 
+  // Handle language filter change and trigger onFilter callback
   const handleLanguageChange = (value) => {
     setLanguage(value);
-    onFilter(region, value); // Pass both region and language
+    onFilter(region, value); // Pass current region and updated language to parent
   };
 
   useEffect(() => {
     let index = 0;
-    // Typing effect logic
+    // Typing effect for the header text
     const interval = setInterval(() => {
-      setText(fullText.slice(0, index)); // Update text state with the next character
+      setText(fullText.slice(0, index)); // Update text state with sliced portion of fullText
       index++;
       if (index > fullText.length) {
-        clearInterval(interval); // Stop typing effect when complete
-        setShowGlobe(true); // Show globe after typing is complete
+        clearInterval(interval); // Stop interval when typing is complete
+        setShowGlobe(true); // Show the Globe component after typing is complete
       }
-    }, 50); // Typing speed in milliseconds
+    }, 50);
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
@@ -41,19 +39,19 @@ export default function ControlsBar({ onSearch, onFilter }) {
     <div className="md:h-[380px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end md:bg-gray-200
     lg:h-[460px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:bg-gray-200
     sm:h-[300px]">
-      {/* Header section with title and optional Globe animation */}
+      {/* Header section with dynamic text and optional Globe animation */}
       <div className="text-center lg:text-left px-4 lg:px-0 mt-12">
         <div className="flex items-center">
           <h1
             className="text-3xl sm:text-4xl lg:text-5xl lg:ml-[140px] md:ml-[90px] font-extrabold mb-4 sm:text-center"
             style={{ fontFamily: 'Roboto' }}
           >
-            {text} {/* Display the dynamically typed text */}
+            {text} {/* Dynamically typed text */}
           </h1>
 
           {showGlobe && (
             <div className="hidden md:block ml-2">
-              <Globe /> {/* Render the Globe component after typing is complete */}
+              <Globe /> {/* Globe animation */}
             </div>
           )}
         </div>
@@ -78,7 +76,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
         <select
           id="region-filter"
           className="w-full md:w-[150px] p-2 border rounded-[6px] shadow"
-          onChange={(e) => handleRegionChange(e.target.value)}
+          onChange={(e) => handleRegionChange(e.target.value)} // Trigger region filter change
         >
           <option value="">Filter by Region</option>
           <option value="Africa">Africa</option>
@@ -91,7 +89,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
         <select
           id="language-filter"
           className="w-full md:w-[150px] p-2 border rounded-[6px] shadow"
-          onChange={(e) => handleLanguageChange(e.target.value)}
+          onChange={(e) => handleLanguageChange(e.target.value)} // Trigger language filter change
         >
           <option value="">Filter by Language</option>
           <option value="English">English</option>

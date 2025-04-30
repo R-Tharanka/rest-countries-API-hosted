@@ -36,16 +36,16 @@ export default function HomePage() {
     }
   };
 
-  // Handles filtering functionality based on region
+  // Handles filtering functionality based on region and language
   const handleFilter = async (region, language) => {
     setLoading(true);
     setError('');
     try {
       const data = await fetchAllCountries(); // Fetch all countries
       const filtered = data.filter((country) => {
-        const matchesRegion = region ? country.region === region : true;
+        const matchesRegion = region ? country.region === region : true; // Match region if provided
         const matchesLanguage = language
-          ? country.languages && Object.values(country.languages).includes(language)
+          ? country.languages && Object.values(country.languages).includes(language) // Match language if provided
           : true;
         return matchesRegion && matchesLanguage;
       });
@@ -58,6 +58,7 @@ export default function HomePage() {
     }
   };
 
+  // Handles filtering functionality based on language
   const handleFilterByLanguage = async (language) => {
     if (!language) {
       getCountries(); // Fetch all countries if no language is selected
@@ -69,7 +70,7 @@ export default function HomePage() {
     try {
       const data = await fetchAllCountries(); // Fetch all countries
       const filtered = data.filter((country) =>
-        country.languages && Object.values(country.languages).includes(language)
+        country.languages && Object.values(country.languages).includes(language) // Match language
       );
       setCountries(filtered);
     } catch (err) {
@@ -106,19 +107,19 @@ export default function HomePage() {
       <div className="mx-auto">
         {/* ControlsBar for search and filter */}
         <ControlsBar
-          onSearch={handleSearch}
-          onFilter={handleFilter} // Pass the combined filter function
+          onSearch={handleSearch} // Pass search handler
+          onFilter={handleFilter} // Pass combined filter handler
         />
         {loading ? (
-          // Loading spinner
+          // Show loading spinner while fetching data
           <div className="flex justify-center py-10">
             <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : error ? (
-          // Display error message
+          // Display error message if an error occurs
           <p className="text-red-500">{error}</p>
         ) : countries.length === 0 ? (
-          // Display message when no countries match
+          // Display message when no countries match the search or filter
           <p className="text-gray-600 text-center py-10">No countries match your search or filter.</p>
         ) : (
           // Display list of countries
@@ -126,12 +127,12 @@ export default function HomePage() {
             {countries.map((country) => (
               <CountryCard
                 key={country.cca3} // Unique key for each country
-                code={country.cca3}
-                flag={country.flags.svg}
-                name={country.name.common}
-                population={country.population.toLocaleString()}
-                region={country.region}
-                capital={country.capital?.[0] || 'N/A'}
+                code={country.cca3} // Country code
+                flag={country.flags.svg} // Country flag
+                name={country.name.common} // Country name
+                population={country.population.toLocaleString()} // Country population
+                region={country.region} // Country region
+                capital={country.capital?.[0] || 'N/A'} // Country capital or 'N/A' if not available
               />
             ))}
           </div>
