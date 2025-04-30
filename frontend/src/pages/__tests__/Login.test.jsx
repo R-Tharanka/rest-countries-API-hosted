@@ -35,3 +35,19 @@ test('handles successful login', async () => {
 
   expect(await screen.findByText(/login/i)).toBeInTheDocument();
 });
+
+test('handles login error', async () => {
+  authService.loginUser.mockRejectedValue(new Error('Invalid credentials'));
+
+  render(
+    <BrowserRouter>
+      <Login />
+    </BrowserRouter>
+  );
+
+  fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: 'test@example.com' } });
+  fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: 'wrongpassword' } });
+  fireEvent.click(screen.getByText(/login/i));
+
+  expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument();
+});

@@ -68,3 +68,17 @@ test('filters countries by region', async () => {
     expect(screen.getByText(/Sri Lanka/i)).toBeInTheDocument();
   });
 });
+
+test('displays no countries message when no countries match the filters', async () => {
+  countriesAPI.fetchAllCountries.mockResolvedValue([]);
+
+  render(
+    <BrowserRouter>
+      <HomePage />
+    </BrowserRouter>
+  );
+
+  await waitFor(() => {
+    expect(screen.getByText(/no countries match your search or filter/i)).toBeInTheDocument();
+  });
+});

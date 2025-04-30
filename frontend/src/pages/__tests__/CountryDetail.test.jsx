@@ -35,3 +35,21 @@ test('handles add to favorites', async () => {
   localStorage.removeItem('user');
   localStorage.removeItem('favorites');
 });
+
+test('handles error when fetching country details', async () => {
+  jest.spyOn(console, 'error').mockImplementation(() => {}); // Suppress console errors
+
+  jest.mock('../../services/countries', () => ({
+    fetchByAlpha: jest.fn().mockRejectedValue(new Error('Failed to fetch country details')),
+  }));
+
+  render(
+    <BrowserRouter>
+      <CountryDetail />
+    </BrowserRouter>
+  );
+
+  expect(await screen.findByText(/failed to fetch country details/i)).toBeInTheDocument();
+
+  console.error.mockRestore();
+});

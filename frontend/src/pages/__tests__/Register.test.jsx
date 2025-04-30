@@ -38,3 +38,25 @@ test('handles successful registration', async () => {
 
   expect(await screen.findByText(/register/i)).toBeInTheDocument();
 });
+
+test('handles registration error', async () => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: false,
+      json: () => Promise.resolve({ message: 'Email already in use' }),
+    })
+  );
+
+  render(
+    <BrowserRouter>
+      <Register />
+    </BrowserRouter>
+  );
+
+  fireEvent.change(screen.getByPlaceholderText(/name/i), { target: { value: 'Test User' } });
+  fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: 'test@example.com' } });
+  fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: 'password' } });
+  fireEvent.click(screen.getByText(/register/i));
+
+  expect(await screen.findByText(/email already in use/i)).toBeInTheDocument();
+});

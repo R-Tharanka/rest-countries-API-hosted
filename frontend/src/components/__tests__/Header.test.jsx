@@ -43,3 +43,20 @@ test('logout button clears user data and redirects to home', () => {
   expect(localStorage.getItem('user')).toBeNull();
   expect(localStorage.getItem('token')).toBeNull();
 });
+
+test('closes dropdown menu when clicking outside', () => {
+  render(
+    <BrowserRouter>
+      <Header />
+    </BrowserRouter>
+  );
+
+  const dropdownButton = screen.getByText(/👤/i);
+  fireEvent.click(dropdownButton); // Open dropdown
+
+  expect(screen.getByText(/logout/i)).toBeInTheDocument();
+
+  fireEvent.mouseDown(document.body); // Simulate clicking outside
+
+  expect(screen.queryByText(/logout/i)).not.toBeInTheDocument();
+});

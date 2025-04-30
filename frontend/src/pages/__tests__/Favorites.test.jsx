@@ -33,3 +33,25 @@ test('renders favorite countries when user is logged in', async () => {
   localStorage.removeItem('user');
   localStorage.removeItem('favorites');
 });
+
+test('handles error when fetching favorite countries', async () => {
+  jest.spyOn(console, 'error').mockImplementation(() => {}); // Suppress console errors
+  localStorage.setItem('user', 'Test User');
+  localStorage.setItem('favorites', JSON.stringify(['LKA']));
+
+  jest.mock('../../services/countries', () => ({
+    fetchByAlpha: jest.fn().mockRejectedValue(new Error('Failed to fetch favorites')),
+  }));
+
+  render(
+    <BrowserRouter>
+      <Favorites />
+    </BrowserRouter>
+  );
+
+  expect(await screen.findByText(/failed to fetch favorites/i)).toBeInTheDocument();
+
+  localStorage.removeItem('user');
+  localStorage.removeItem('favorites');
+  console.error.mockRestore();
+});

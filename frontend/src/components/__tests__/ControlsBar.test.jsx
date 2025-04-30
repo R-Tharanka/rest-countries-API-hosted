@@ -28,3 +28,13 @@ test('calls onFilter when selecting a region', () => {
 
   expect(onFilterMock).toHaveBeenCalledWith('Asia');
 });
+
+test('calls onFilter with empty value when no region is selected', () => {
+  const onFilterMock = jest.fn();
+  render(<ControlsBar onFilter={onFilterMock} onSearch={() => {}} />);
+
+  const select = screen.getByRole('combobox');
+  fireEvent.change(select, { target: { value: '' } });
+
+  expect(onFilterMock).toHaveBeenCalledWith('', undefined);
+});

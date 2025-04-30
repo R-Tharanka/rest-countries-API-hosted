@@ -46,3 +46,26 @@ test('renders children if token is valid', () => {
 
   localStorage.removeItem('token');
 });
+
+test('redirects to login if token is expired', () => {
+  const expiredToken = btoa(JSON.stringify({ exp: Math.floor(Date.now() / 1000) - 60 }));
+  localStorage.setItem('token', `header.${expiredToken}.signature`);
+
+  const { container } = render(
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/protected"
+          element={
+            <ProtectedRoute>
+              <div>Protected Content</div>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+
+  expect(container.textContent).not.toContain('Protected Content');
+  localStorage.removeItem('token');
+});
