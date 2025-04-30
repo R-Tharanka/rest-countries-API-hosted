@@ -37,19 +37,43 @@ export default function HomePage() {
   };
 
   // Handles filtering functionality based on region
-  const handleFilter = async (region) => {
-    if (!region) {
-      getCountries(); // Fetch all countries if no region is selected
+  const handleFilter = async (region, language) => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await fetchAllCountries(); // Fetch all countries
+      const filtered = data.filter((country) => {
+        const matchesRegion = region ? country.region === region : true;
+        const matchesLanguage = language
+          ? country.languages && Object.values(country.languages).includes(language)
+          : true;
+        return matchesRegion && matchesLanguage;
+      });
+      setCountries(filtered);
+    } catch (err) {
+      setError('Error filtering countries.');
+      setCountries([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFilterByLanguage = async (language) => {
+    if (!language) {
+      getCountries(); // Fetch all countries if no language is selected
       return;
     }
 
     setLoading(true);
     setError('');
     try {
-      const data = await fetchByRegion(region); // Fetch countries by region
-      setCountries(data);
+      const data = await fetchAllCountries(); // Fetch all countries
+      const filtered = data.filter((country) =>
+        country.languages && Object.values(country.languages).includes(language)
+      );
+      setCountries(filtered);
     } catch (err) {
-      setError('Error filtering by region.'); // Handle errors during filtering
+      setError('Error filtering by language.');
       setCountries([]);
     } finally {
       setLoading(false);
@@ -81,7 +105,10 @@ export default function HomePage() {
       <Header />
       <div className="mx-auto">
         {/* ControlsBar for search and filter */}
-        <ControlsBar onSearch={handleSearch} onFilter={handleFilter} />
+        <ControlsBar
+          onSearch={handleSearch}
+          onFilter={handleFilter} // Pass the combined filter function
+        />
         {loading ? (
           // Loading spinner
           <div className="flex justify-center py-10">

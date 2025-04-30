@@ -3,10 +3,24 @@ import React, { useState, useEffect } from 'react';
 import Globe from '../components/Globe';
 
 export default function ControlsBar({ onSearch, onFilter }) {
+
+  const [region, setRegion] = useState('');
+  const [language, setLanguage] = useState('');
+
   // Full text to be displayed with typing effect
   const fullText = 'Explore Countries Around the Globe';
   const [text, setText] = useState(''); // State to hold the current text being typed
   const [showGlobe, setShowGlobe] = useState(false); // State to control the visibility of the Globe component
+
+  const handleRegionChange = (value) => {
+    setRegion(value);
+    onFilter(value, language); // Pass both region and language
+  };
+
+  const handleLanguageChange = (value) => {
+    setLanguage(value);
+    onFilter(region, value); // Pass both region and language
+  };
 
   useEffect(() => {
     let index = 0;
@@ -61,11 +75,10 @@ export default function ControlsBar({ onSearch, onFilter }) {
           onChange={(e) => onSearch(e.target.value)} // Trigger onSearch callback with input value
         />
         {/* Region filter dropdown */}
-        <label htmlFor="region-filter" className="sr-only">Filter by Region</label>
         <select
           id="region-filter"
           className="w-full md:w-[150px] p-2 border rounded-[6px] shadow"
-          onChange={(e) => onFilter(e.target.value)} // Trigger onFilter callback with selected value
+          onChange={(e) => handleRegionChange(e.target.value)}
         >
           <option value="">Filter by Region</option>
           <option value="Africa">Africa</option>
@@ -73,6 +86,19 @@ export default function ControlsBar({ onSearch, onFilter }) {
           <option value="Asia">Asia</option>
           <option value="Europe">Europe</option>
           <option value="Oceania">Oceania</option>
+        </select>
+        {/* Language filter dropdown */}
+        <select
+          id="language-filter"
+          className="w-full md:w-[150px] p-2 border rounded-[6px] shadow"
+          onChange={(e) => handleLanguageChange(e.target.value)}
+        >
+          <option value="">Filter by Language</option>
+          <option value="English">English</option>
+          <option value="Spanish">Spanish</option>
+          <option value="French">French</option>
+          <option value="Arabic">Arabic</option>
+          <option value="Chinese">Chinese</option>
         </select>
       </div>
     </div>
