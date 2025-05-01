@@ -15,7 +15,7 @@ describe('CountryDetail page', () => {
 
     // Stub out the router hooks
     jest.spyOn(router, 'useParams').mockReturnValue({ code: 'LKA' });
-    jest.spyOn(router, 'useNavigate').mockReturnValue(() => {});
+    jest.spyOn(router, 'useNavigate').mockReturnValue(() => { });
   });
 
   it('renders country details when API succeeds', async () => {
