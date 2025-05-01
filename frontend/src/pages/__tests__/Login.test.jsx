@@ -1,53 +1,91 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import Login from '../Login';
-import * as authService from '../../services/auth';
-import * as favoritesService from '../../services/favorites';
+// src/pages/__tests__/Login.test.jsx
+import React from 'react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { MemoryRouter, __setNavigateMock } from 'react-router-dom'
+import Login from '../Login'
+import * as authService from '../../services/auth'
+import * as favoritesService from '../../services/favorites'
 
-jest.mock('../../services/auth');
-jest.mock('../../services/favorites');
+jest.mock('../../services/auth')
+jest.mock('../../services/favorites')
 
-test('renders login form', () => {
-  render(
-    <BrowserRouter>
-      <Login />
-    </BrowserRouter>
-  );
+describe('Login page', () => {
+  const mockNavigate = jest.fn()
 
-  expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
-  expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
-  expect(screen.getByText(/login/i)).toBeInTheDocument();
-});
+  beforeEach(() => {
+    jest.clearAllMocks()
+    localStorage.clear()
+    // wire our navigate spy into the manual mock
+    __setNavigateMock(mockNavigate)
+  })
 
-test('handles successful login', async () => {
-  authService.loginUser.mockResolvedValue({ token: 'test-token', name: 'Test User' });
-  favoritesService.getFavorites.mockResolvedValue(['LKA']);
+  it('renders all form controls and the register link', () => {
+    render(
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>
+    )
 
-  render(
-    <BrowserRouter>
-      <Login />
-    </BrowserRouter>
-  );
+    // heading
+    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
+    // inputs
+    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument()
+    // submit
+    expect(screen.getByRole('button', { name: /^login$/i })).toBeInTheDocument()
+    // register link (our stubbed <Link> forwards `to`, not `href`)
+    expect(screen.getByText(/register here/i)).toHaveAttribute('to', '/register')
+  })
 
-  fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: 'test@example.com' } });
-  fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: 'password' } });
-  fireEvent.click(screen.getByText(/login/i));
+  it('on successful login saves to localStorage, syncs favorites and navigates home', async () => {
+    authService.loginUser.mockResolvedValue({ token: 'tok123', name: 'Alice' })
+    favoritesService.getFavorites.mockResolvedValue(['USA', 'FRA'])
 
-  expect(await screen.findByText(/login/i)).toBeInTheDocument();
-});
+    render(
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>
+    )
 
-test('handles login error', async () => {
-  authService.loginUser.mockRejectedValue(new Error('Invalid credentials'));
+    fireEvent.change(screen.getByPlaceholderText(/email/i), {
+      target: { value: 'alice@example.com' }
+    })
+    fireEvent.change(screen.getByPlaceholderText(/password/i), {
+      target: { value: 'supersecret' }
+    })
+    fireEvent.click(screen.getByRole('button', { name: /^login$/i }))
 
-  render(
-    <BrowserRouter>
-      <Login />
-    </BrowserRouter>
-  );
+    await waitFor(() => {
+      // did we save correctly?
+      expect(localStorage.getItem('token')).toBe('tok123')
+      expect(localStorage.getItem('user')).toBe('Alice')
+      expect(JSON.parse(localStorage.getItem('favorites'))).toEqual(['USA', 'FRA'])
+      // did we navigate home?
+      expect(mockNavigate).toHaveBeenCalledWith('/')
+    })
+  })
 
-  fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: 'test@example.com' } });
-  fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: 'wrongpassword' } });
-  fireEvent.click(screen.getByText(/login/i));
+  it('on failed login shows error and does not persist anything', async () => {
+    authService.loginUser.mockRejectedValue(new Error('Invalid credentials'))
 
-  expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument();
-});
+    render(
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>
+    )
+
+    fireEvent.change(screen.getByPlaceholderText(/email/i), {
+      target: { value: 'bob@example.com' }
+    })
+    fireEvent.change(screen.getByPlaceholderText(/password/i), {
+      target: { value: 'wrong' }
+    })
+    fireEvent.click(screen.getByRole('button', { name: /^login$/i }))
+
+    // error message
+    expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument()
+    // nothing saved
+    expect(localStorage.getItem('token')).toBeNull()
+    expect(localStorage.getItem('user')).toBeNull()
+  })
+})

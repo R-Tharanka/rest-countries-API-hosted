@@ -1,31 +1,37 @@
-import React from 'react';
+// src/__mocks__/react-router-dom.js
+import React from 'react'
 
-//
-// A minimal stub of the bits of React Router you use in your app/tests
-//
+// internal store for our navigate spy:
+let _navigateMock = () => {}
 
-// We'll hold onto one single navigate mock function, but allow it to be replaced:
-let _navigateMock = () => {};
+/**
+ * Test helper to inject your own navigate spy.
+ */
 export function __setNavigateMock(fn) {
-  _navigateMock = fn;
+  _navigateMock = fn
 }
 
+// same as BrowserRouter for most tests:
 export function BrowserRouter({ children }) {
-  return <>{children}</>;
+  return <>{children}</>
 }
+// alias it so tests importing MemoryRouter work:
+export const MemoryRouter = BrowserRouter
+
 export function Link({ children, ...props }) {
-  return <a {...props}>{children}</a>;
+  return <a {...props}>{children}</a>
 }
 export function Routes({ children }) {
-  return <>{children}</>;
+  return <>{children}</>
 }
 export function Route({ element }) {
-  return element;
+  return element
 }
-// This hook returns whatever _navigateMock currently is:
+
+// when your app calls this hook, it gets our spy:
 export function useNavigate() {
-  return _navigateMock;
+  return _navigateMock
 }
 export function useParams() {
-  return {};
+  return {}
 }
