@@ -1,40 +1,68 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+// src/components/__tests__/ControlsBar.test.jsx
+import React from 'react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import ControlsBar from '../ControlsBar';
 
-test('renders search and filter controls', () => {
-  render(<ControlsBar onSearch={jest.fn()} onFilter={jest.fn()} />);
+// Stub out the Globe animation so we never pull in amcharts5 in tests
+jest.mock('../Globe', () => () => <div data-testid="globe" />);
 
-  expect(screen.getByPlaceholderText(/search for a country/i)).toBeInTheDocument();
-  expect(screen.getByRole('combobox')).toBeInTheDocument();
-});
+describe('ControlsBar', () => {
+  it('renders search input and two filter dropdowns', () => {
+    render(<ControlsBar onSearch={jest.fn()} onFilter={jest.fn()} />);
+    // search box
+    expect(
+      screen.getByPlaceholderText(/search for a country/i)
+    ).toBeInTheDocument();
 
-test('calls onSearch when typing in search input', () => {
-  const onSearchMock = jest.fn();
-  render(<ControlsBar onSearch={onSearchMock} onFilter={jest.fn()} />);
-
-  fireEvent.change(screen.getByPlaceholderText(/search for a country/i), {
-    target: { value: 'Sri Lanka' },
+    // exactly two <select>s = two comboboxes
+    const selects = screen.getAllByRole('combobox');
+    expect(selects).toHaveLength(2);
   });
 
-  expect(onSearchMock).toHaveBeenCalledWith('Sri Lanka');
-});
+  it('calls onSearch when typing in the search box', () => {
+    const onSearch = jest.fn();
+    render(<ControlsBar onSearch={onSearch} onFilter={jest.fn()} />);
 
-test('calls onFilter when selecting a region', () => {
-  const onFilterMock = jest.fn();
-  render(<ControlsBar onFilter={onFilterMock} onSearch={() => {}} />);
+    fireEvent.change(screen.getByPlaceholderText(/search for a country/i), {
+      target: { value: 'Brazil' },
+    });
+    expect(onSearch).toHaveBeenCalledWith('Brazil');
+  });
 
-  const select = screen.getByRole('combobox');
-  fireEvent.change(select, { target: { value: 'Asia' } });
+  it('calls onFilter(region, language) when changing the region dropdown', () => {
+    const onFilter = jest.fn();
+    render(<ControlsBar onSearch={jest.fn()} onFilter={onFilter} />);
 
-  expect(onFilterMock).toHaveBeenCalledWith('Asia');
-});
+    const [regionSelect, languageSelect] = screen.getAllByRole('combobox');
+    fireEvent.change(regionSelect, { target: { value: 'Asia' } });
 
-test('calls onFilter with empty value when no region is selected', () => {
-  const onFilterMock = jest.fn();
-  render(<ControlsBar onFilter={onFilterMock} onSearch={() => {}} />);
+    // language should still be the empty string
+    expect(onFilter).toHaveBeenCalledWith('Asia', '');
+  });
 
-  const select = screen.getByRole('combobox');
-  fireEvent.change(select, { target: { value: '' } });
+  it('calls onFilter(region, language) when changing the language dropdown', () => {
+    const onFilter = jest.fn();
+    render(<ControlsBar onSearch={jest.fn()} onFilter={onFilter} />);
 
-  expect(onFilterMock).toHaveBeenCalledWith('', undefined);
+    const [regionSelect, languageSelect] = screen.getAllByRole('combobox');
+    fireEvent.change(languageSelect, { target: { value: 'French' } });
+
+    // region should still be the empty string
+    expect(onFilter).toHaveBeenCalledWith('', 'French');
+  });
+
+  it('reveals the Globe after the typing effect finishes', async () => {
+    jest.useFakeTimers();
+    render(<ControlsBar onSearch={jest.fn()} onFilter={jest.fn()} />);
+
+    const fullText = 'Explore Countries Around the Globe';
+    // Typing happens at 50ms intervals, and showGlobe is set after fullText.length + 1 steps
+    act(() => {
+      jest.advanceTimersByTime((fullText.length + 1) * 50 + 5);
+    });
+
+    expect(await screen.findByTestId('globe')).toBeInTheDocument();
+    jest.useRealTimers();
+  });
+
 });
