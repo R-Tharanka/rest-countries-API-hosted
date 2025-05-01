@@ -1,57 +1,70 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Favorites from '../Favorites';
+import * as countriesAPI from '../../services/countries';
 
-jest.mock('../../services/countries', () => ({
-  fetchByAlpha: jest.fn().mockResolvedValue([{ cca3: 'LKA', name: { common: 'Sri Lanka' }, flags: { svg: 'https://flagcdn.com/lk.svg' }, population: 21000000, region: 'Asia', capital: ['Colombo'] }]),
-}));
+jest.mock('../../services/countries');
 
-test('renders message when no user is logged in', () => {
-  localStorage.removeItem('user');
+describe('Favorites page', () => {
+  beforeEach(() => {
+    countriesAPI.fetchByAlpha.mockReset();
+    localStorage.clear();
+  });
 
-  render(
-    <BrowserRouter>
-      <Favorites />
-    </BrowserRouter>
-  );
+  test('renders message when no user is logged in', () => {
+    render(
+      <BrowserRouter>
+        <Favorites />
+      </BrowserRouter>
+    );
+    expect(screen.getByText(/please login to view favorites/i)).toBeInTheDocument();
+  });
 
-  expect(screen.getByText(/please login to view favorites/i)).toBeInTheDocument();
-});
+  test('renders favorite countries when user is logged in', async () => {
+    localStorage.setItem('user', 'Test User');
+    localStorage.setItem('favorites', JSON.stringify(['LKA']));
 
-test('renders favorite countries when user is logged in', async () => {
-  localStorage.setItem('user', 'Test User');
-  localStorage.setItem('favorites', JSON.stringify(['LKA']));
+    countriesAPI.fetchByAlpha.mockResolvedValue([
+      {
+        cca3: 'LKA',
+        name: { common: 'Sri Lanka' },
+        flags: { svg: 'https://flagcdn.com/lk.svg' },
+        population: 21000000,
+        region: 'Asia',
+        capital: ['Colombo']
+      }
+    ]);
 
-  render(
-    <BrowserRouter>
-      <Favorites />
-    </BrowserRouter>
-  );
+    await act(async () => {
+      render(
+        <BrowserRouter>
+          <Favorites />
+        </BrowserRouter>
+      );
+    });
 
-  expect(await screen.findByText(/sri lanka/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/Sri Lanka/i)).toBeInTheDocument();
+    });
+  });
 
-  localStorage.removeItem('user');
-  localStorage.removeItem('favorites');
-});
+  test('handles error when fetching favorite countries', async () => {
+    localStorage.setItem('user', 'Test User');
+    localStorage.setItem('favorites', JSON.stringify(['LKA']));
 
-test('handles error when fetching favorite countries', async () => {
-  jest.spyOn(console, 'error').mockImplementation(() => {}); // Suppress console errors
-  localStorage.setItem('user', 'Test User');
-  localStorage.setItem('favorites', JSON.stringify(['LKA']));
+    countriesAPI.fetchByAlpha.mockRejectedValue(new Error('boom'));
 
-  jest.mock('../../services/countries', () => ({
-    fetchByAlpha: jest.fn().mockRejectedValue(new Error('Failed to fetch favorites')),
-  }));
+    await act(async () => {
+      render(
+        <BrowserRouter>
+          <Favorites />
+        </BrowserRouter>
+      );
+    });
 
-  render(
-    <BrowserRouter>
-      <Favorites />
-    </BrowserRouter>
-  );
-
-  expect(await screen.findByText(/failed to fetch favorites/i)).toBeInTheDocument();
-
-  localStorage.removeItem('user');
-  localStorage.removeItem('favorites');
-  console.error.mockRestore();
+    await waitFor(() => {
+      expect(screen.getByText(/Failed to fetch favorites/i)).toBeInTheDocument();
+    });
+  });
 });
