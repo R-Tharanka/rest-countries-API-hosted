@@ -1,6 +1,13 @@
+// frontend/src/components/__tests__/Header.test.jsx
+
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Header from '../Header';
+
+beforeEach(() => {
+  localStorage.clear();
+});
 
 test('renders login link when user is not logged in', () => {
   render(
@@ -12,7 +19,7 @@ test('renders login link when user is not logged in', () => {
   expect(screen.getByText(/login/i)).toBeInTheDocument();
 });
 
-test('renders favorites link and logout button when user is logged in', () => {
+test('renders favorites link and profile button when user is logged in', () => {
   localStorage.setItem('user', 'Test User');
 
   render(
@@ -23,11 +30,9 @@ test('renders favorites link and logout button when user is logged in', () => {
 
   expect(screen.getByText(/favorites/i)).toBeInTheDocument();
   expect(screen.getByText(/👤/i)).toBeInTheDocument();
-
-  localStorage.removeItem('user');
 });
 
-test('logout button clears user data and redirects to home', () => {
+test('logout button clears user data', () => {
   localStorage.setItem('user', 'Test User');
   localStorage.setItem('token', 'test-token');
 
@@ -37,6 +42,7 @@ test('logout button clears user data and redirects to home', () => {
     </BrowserRouter>
   );
 
+  // Open the dropdown and click logout
   fireEvent.click(screen.getByText(/👤/i));
   fireEvent.click(screen.getByText(/logout/i));
 
@@ -45,18 +51,22 @@ test('logout button clears user data and redirects to home', () => {
 });
 
 test('closes dropdown menu when clicking outside', () => {
+  // Simulate a logged-in user so the 👤 button actually renders
+  localStorage.setItem('user', 'Test User');
+
   render(
     <BrowserRouter>
       <Header />
     </BrowserRouter>
   );
 
-  const dropdownButton = screen.getByText(/👤/i);
-  fireEvent.click(dropdownButton); // Open dropdown
-
+  // Open dropdown
+  fireEvent.click(screen.getByText(/👤/i));
   expect(screen.getByText(/logout/i)).toBeInTheDocument();
 
-  fireEvent.mouseDown(document.body); // Simulate clicking outside
+  // Click outside
+  fireEvent.mouseDown(document.body);
 
+  // Dropdown should be gone
   expect(screen.queryByText(/logout/i)).not.toBeInTheDocument();
 });
