@@ -88,7 +88,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
         {/* Language filter dropdown */}
         <select
           id="language-filter"
-          className="w-full md:w-[150px] p-2 border rounded-[6px] shadow"
+          className="w-full md:w-[170px] p-2 border rounded-[6px] shadow"
           onChange={(e) => handleLanguageChange(e.target.value)} // Trigger language filter change
         >
           <option value="">Filter by Language</option>

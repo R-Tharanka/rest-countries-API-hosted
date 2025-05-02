@@ -8,13 +8,14 @@ export default function Globe() {
     const chartRef = useRef(null); // Reference to the chart container
 
     useEffect(() => {
-        // Initialize the chart root
-        const root = am5.Root.new(chartRef.current);
+        const root = am5.Root?.new?.(chartRef.current);
+        if (!root) return;
 
-        // Apply animated theme
-        root.setThemes([
-            am5themes_Animated.new(root)
-        ]);
+        // Apply animated theme (only if root.setThemes exists)
+        const theme = am5themes_Animated?.new?.(root);
+        if (typeof root.setThemes === 'function' && theme) {
+            root.setThemes([theme]);
+        }
 
         // Create a map chart with orthographic projection
         const chart = root.container.children.push(
@@ -76,7 +77,11 @@ export default function Globe() {
         chart.appear(1000, 100);
 
         // Cleanup on component unmount
-        return () => root.dispose();
+        return () => {
+            if (root) {
+                root.dispose();
+            }
+        };
     }, []);
 
     return (
