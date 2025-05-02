@@ -5,7 +5,7 @@ import HomePage from '../HomePage';
 import { BrowserRouter } from 'react-router-dom';
 import * as countriesAPI from '../../services/countries';
 
-// ---- STUB OUT YOUR CONTROLS BAR AND COUNTRY CARD ----
+// ---- STUB OUT CONTROLS BAR AND COUNTRY CARD ----
 jest.mock('../../components/ControlsBar', () => () => <div data-testid="controls-bar" />);
 jest.mock('../../components/CountryCard', () => ({ name }) => <div>{name}</div>);
 
@@ -38,8 +38,7 @@ test('displays error message on API failure', async () => {
 });
 
 test('filters countries by region', async () => {
-  // we stub ControlsBar, so we’ll manually call the region filter handler
-  // or you can test handleFilter logic separately in a unit test.
+  // stub ControlsBar, so we’ll manually call the region filter handler
 });
 
 test('displays no countries message when no countries match the filters', async () => {
