@@ -4,53 +4,69 @@ import { fetchByAlpha } from '../services/countries';
 import Header from '../components/Header';
 
 export default function Favorites() {
-    const [favorites, setFavorites] = useState([]);
-    const [countries, setCountries] = useState([]);
-    const user = localStorage.getItem('user');
+  const [favorites, setFavorites] = useState([]);      // country codes
+  const [countries, setCountries] = useState([]);      // country details
+  const [error, setError] = useState('');              // <-- new
 
-    useEffect(() => {
-        const favCodes = JSON.parse(localStorage.getItem('favorites')) || [];
-        setFavorites(favCodes);
+  const user = localStorage.getItem('user');
 
-        const fetchFavorites = async () => {
-            try {
-                const promises = favCodes.map(code => fetchByAlpha(code).then(res => res[0]));
-                const data = await Promise.all(promises);
-                setCountries(data);
-            } catch (err) {
-                console.error('Failed to fetch favorites:', err);
-            }
-        };
+  useEffect(() => {
+    const favCodes = JSON.parse(localStorage.getItem('favorites')) || [];
+    setFavorites(favCodes);
 
-        fetchFavorites();
-    }, []);
+    const fetchFavorites = async () => {
+      try {
+        const promises = favCodes.map((code) =>
+          fetchByAlpha(code).then((res) => res[0])
+        );
+        const data = await Promise.all(promises);
+        setCountries(data);
+      } catch (err) {
+        console.error('Failed to fetch favorites:', err);
+        setError('Failed to fetch favorites');       // <-- new
+      }
+    };
 
-    if (!user) return <p className="p-4 text-center">Please login to view favorites.</p>;
+    fetchFavorites();
+  }, []);
 
-    return (
-        <div>
-            <Header />
+  // 1) If not logged in:
+  if (!user) {
+    return <p className="p-4 text-center">Please login to view favorites.</p>;
+  }
 
-            <div className="p-4 max-w-7xl mx-auto">
-                <h2 className="text-2xl font-bold mb-4">Your Favorite Countries</h2>
-                {countries.length === 0 ? (
-                    <p>No favorites added yet.</p>
-                ) : (
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                        {countries.map((country) => (
-                            <CountryCard
-                                key={country.cca3}
-                                code={country.cca3}
-                                flag={country.flags.svg}
-                                name={country.name.common}
-                                population={country.population.toLocaleString()}
-                                region={country.region}
-                                capital={country.capital?.[0] || 'N/A'}
-                            />
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <Header />
+
+      <div className="p-4 max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold mb-4">Your Favorite Countries</h2>
+
+        {/* 2) Error branch */}
+        {error ? (
+          <p className="text-red-500">{error}</p>
+
+        // {/* 3) No favorites */}
+        ) : countries.length === 0 ? (
+          <p>No favorites added yet.</p>
+
+        // {/* 4) Show the grid */}
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {countries.map((country) => (
+              <CountryCard
+                key={country.cca3}
+                code={country.cca3}
+                flag={country.flags.svg}
+                name={country.name.common}
+                population={country.population.toLocaleString()}
+                region={country.region}
+                capital={country.capital?.[0] || 'N/A'}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

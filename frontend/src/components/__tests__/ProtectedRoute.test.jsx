@@ -1,48 +1,49 @@
+// frontend/src/components/__tests__/ProtectedRoute.test.jsx
+import React from 'react';
 import { render } from '@testing-library/react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import ProtectedRoute from '../ProtectedRoute';
 
-test('redirects to login if token is missing', () => {
+afterEach(() => localStorage.clear());
+
+test('redirects (renders nothing) if token is missing', () => {
   localStorage.removeItem('token');
-
-  const { container } = render(
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/protected"
-          element={
-            <ProtectedRoute>
-              <div>Protected Content</div>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+  const { queryByText } = render(
+    <MemoryRouter>
+      <ProtectedRoute>
+        <div> Protected</div>
+      </ProtectedRoute>
+    </MemoryRouter>
   );
-
-  expect(container.textContent).not.toContain('Protected Content');
+  expect(queryByText(/Protected/)).toBeNull();
 });
 
 test('renders children if token is valid', () => {
-  const validToken = btoa(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 60 }));
-  localStorage.setItem('token', `header.${validToken}.signature`);
+  const validPayload = { exp: Math.floor(Date.now() / 1000) + 60 };
+  const token = btoa(JSON.stringify(validPayload));
+  localStorage.setItem('token', `h.${token}.s`);
 
-  const { container } = render(
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/protected"
-          element={
-            <ProtectedRoute>
-              <div>Protected Content</div>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+  const { getByText } = render(
+    <MemoryRouter>
+      <ProtectedRoute>
+        <div> Protected</div>
+      </ProtectedRoute>
+    </MemoryRouter>
   );
+  expect(getByText(/Protected/)).toBeInTheDocument();
+});
 
-  expect(container.textContent).toContain('Protected Content');
+test('redirects if token is expired', () => {
+  const expiredPayload = { exp: Math.floor(Date.now() / 1000) - 60 };
+  const token = btoa(JSON.stringify(expiredPayload));
+  localStorage.setItem('token', `h.${token}.s`);
 
-  localStorage.removeItem('token');
+  const { queryByText } = render(
+    <MemoryRouter>
+      <ProtectedRoute>
+        <div> Protected</div>
+      </ProtectedRoute>
+    </MemoryRouter>
+  );
+  expect(queryByText(/Protected/)).toBeNull();
 });
