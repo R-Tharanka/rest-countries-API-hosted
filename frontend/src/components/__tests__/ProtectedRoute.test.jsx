@@ -11,7 +11,7 @@ test('redirects (renders nothing) if token is missing', () => {
   const { queryByText } = render(
     <MemoryRouter>
       <ProtectedRoute>
-        <div>👀 Protected</div>
+        <div> Protected</div>
       </ProtectedRoute>
     </MemoryRouter>
   );
@@ -26,7 +26,7 @@ test('renders children if token is valid', () => {
   const { getByText } = render(
     <MemoryRouter>
       <ProtectedRoute>
-        <div>✅ Protected</div>
+        <div> Protected</div>
       </ProtectedRoute>
     </MemoryRouter>
   );
@@ -41,7 +41,7 @@ test('redirects if token is expired', () => {
   const { queryByText } = render(
     <MemoryRouter>
       <ProtectedRoute>
-        <div>👀 Protected</div>
+        <div> Protected</div>
       </ProtectedRoute>
     </MemoryRouter>
   );

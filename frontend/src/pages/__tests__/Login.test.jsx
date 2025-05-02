@@ -15,7 +15,7 @@ describe('Login page', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     localStorage.clear()
-    // wire our navigate spy into the manual mock
+    // wire navigate spy into the manual mock
     __setNavigateMock(mockNavigate)
   })
 
@@ -33,7 +33,7 @@ describe('Login page', () => {
     expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument()
     // submit
     expect(screen.getByRole('button', { name: /^login$/i })).toBeInTheDocument()
-    // register link (our stubbed <Link> forwards `to`, not `href`)
+    // register link (stubbed <Link> forwards `to`, not `href`)
     expect(screen.getByText(/register here/i)).toHaveAttribute('to', '/register')
   })
 
@@ -56,11 +56,11 @@ describe('Login page', () => {
     fireEvent.click(screen.getByRole('button', { name: /^login$/i }))
 
     await waitFor(() => {
-      // did we save correctly?
+      // checking save correctly?
       expect(localStorage.getItem('token')).toBe('tok123')
       expect(localStorage.getItem('user')).toBe('Alice')
       expect(JSON.parse(localStorage.getItem('favorites'))).toEqual(['USA', 'FRA'])
-      // did we navigate home?
+      // checking navigate home?
       expect(mockNavigate).toHaveBeenCalledWith('/')
     })
   })
