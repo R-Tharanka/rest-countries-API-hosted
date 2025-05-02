@@ -1,70 +1,146 @@
-# Getting Started with Create React App
+# REST Countries Explorer Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React application that allows users to explore information about countries worldwide, with features for searching, filtering, and managing favorite countries.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Country Exploration**: Browse, search, and filter countries
+- **Interactive Globe**: 3D globe visualization using amCharts
+- **Detailed Country Information**: View comprehensive details about each country
+- **User Authentication**: Secure login and registration system
+- **Favorites Management**: Save and manage favorite countries (requires authentication)
+- **Responsive Design**: Fully responsive UI using Tailwind CSS
+- **Toast Notifications**: User-friendly notifications using react-hot-toast
+- **Back to Top**: Smooth scroll functionality for better UX
 
-### `npm start`
+## Technology Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **React**: ^19.1.0
+- **React Router DOM**: ^7.5.3
+- **amCharts 5**: Interactive data visualization
+- **Tailwind CSS**: Utility-first CSS framework
+- **React Hot Toast**: Notifications system
+- **Lucide React**: Icon components
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+```
+src/
+├── components/           # Reusable UI components
+│   ├── BackToTop.jsx    # Scroll to top functionality
+│   ├── ControlsBar.jsx  # Search and filter controls
+│   ├── CountryCard.jsx  # Country display card
+│   ├── Globe.jsx        # Interactive 3D globe
+│   ├── Header.jsx       # Application header
+│   └── ProtectedRoute.jsx # Route protection logic
+├── pages/               # Main application pages
+│   ├── HomePage.jsx     # Landing page
+│   ├── CountryDetail.jsx # Country details page
+│   ├── Favorites.jsx    # User favorites page
+│   ├── Login.jsx        # Login page
+│   └── Register.jsx     # Registration page
+├── services/           # API and data services
+│   ├── auth.js         # Authentication service
+│   ├── countries.js    # Countries API service
+│   ├── favorites.js    # Favorites management
+│   └── fetchWithAuth.js # Authenticated API requests
+└── utils/             # Utility functions
+    └── handleAuthError.js # Auth error handling
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+1. **Installation**
+   ```bash
+   npm install
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **Environment Setup**
+   Create a `.env` file in the project root with:
+   ```
+   PORT=3001
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. **Development**
+   ```bash
+   npm start
+   ```
+   The application will run on http://localhost:3001
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. **Testing**
+   ```bash
+   npm test
+   ```
 
-### `npm run eject`
+## Component Documentation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Core Components
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **ControlsBar**: Provides search and filtering functionality
+  - Search by country name
+  - Filter by region (Africa, Americas, Asia, Europe, Oceania)
+  - Filter by language (English, Spanish, French, Arabic, Chinese)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Globe**: Interactive 3D globe visualization
+  - Auto-rotation feature
+  - Country hover effects
+  - Responsive sizing
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **CountryCard**: Displays country information
+  - Flag display
+  - Basic country details
+  - Click through to detailed view
 
-## Learn More
+### Authentication Components
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **ProtectedRoute**: Route protection for authenticated features
+  - JWT token validation
+  - Automatic redirection to login
+  - Session management
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Page Components
 
-### Code Splitting
+- **HomePage**: Main landing page with country listing
+- **CountryDetail**: Detailed country information display
+- **Favorites**: Protected page for managing favorite countries
+- **Login/Register**: User authentication pages
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Testing
 
-### Analyzing the Bundle Size
+The project includes comprehensive test coverage using Jest and React Testing Library. Tests are organized alongside their components:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+__tests__/
+├── components/        # Component tests
+└── pages/            # Page component tests
+```
 
-### Making a Progressive Web App
+Run tests with:
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Build
 
-### Advanced Configuration
+To create a production build:
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## API Integration
 
-### Deployment
+The frontend integrates with:
+- REST Countries API for country data
+- Custom backend for authentication and favorites management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Contributing
 
-### `npm run build` fails to minify
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Push to the branch
+5. Open a Pull Request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+
+This project is licensed under the MIT License.
