@@ -77,7 +77,7 @@ export default function CountryDetail() {
           Session expired. Please log in again.
         </div>
       )}
-      <div className="p-4 max-w-4xl mx-auto">
+      <div className="p-4 max-w-4xl mx-auto fade-in">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 mt-4 gap-2">
           {/* Back button */}
           <Link

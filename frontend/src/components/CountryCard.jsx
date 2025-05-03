@@ -6,7 +6,7 @@ export default function CountryCard({ flag, name, population, region, capital, c
   return (
     // Link to the detailed page of the country using its code
     <Link to={`/country/${code}`}>
-      <div className="bg-white mb-[40px] rounded-lg overflow-hidden shadow hover:shadow-lg transition hover:scale-[1.02]">
+      <div className="bg-white mb-[40px] rounded-lg overflow-hidden shadow card-animation fade-in hover:shadow-lg transition hover:scale-[1.02]">
         {/* Display the country's flag */}
         <img src={flag} alt={`${name} flag`} className="h-32 w-full object-cover" />
         <div className="p-4">
