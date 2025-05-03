@@ -6,7 +6,7 @@ export async function fetchWithAuth(endpoint, options = {}, navigate, setSession
   const token = localStorage.getItem('token');
 
   // Make the API request with the provided endpoint and options
-  const res = await fetch(`http://localhost:5000/api/auth${endpoint}`, {
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth${endpoint}`, {
     ...options,
     headers: {
       ...(options.headers || {}), // Merge any existing headers with the Authorization header

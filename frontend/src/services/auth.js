@@ -1,5 +1,5 @@
 // Base URL for the authentication API
-const API_BASE = 'http://localhost:5000/api/auth';
+const API_BASE = '${process.env.REACT_APP_API_URL}/api/auth';
 
 // Function to log in a user
 export const loginUser = async (email, password) => {
