@@ -1,4 +1,3 @@
-
 # REST Countries Explorer
 
 This project is a full-stack web application that allows users to explore information about countries, search and filter them, and manage a list of favorite countries. It consists of a **frontend** built with React and Tailwind CSS and a **backend** built with Node.js, Express, and MongoDB.
@@ -10,6 +9,10 @@ This project is a full-stack web application that allows users to explore inform
 - **Country Details**: View detailed information about a specific country, including its flag, population, region, and more.
 - **Favorites**: Logged-in users can add or remove countries from their favorites list.
 - **Authentication**: Users can register, log in, and log out.
+- **Interactive Globe**: 3D globe visualization using amCharts.
+- **Responsive Design**: Fully responsive UI using Tailwind CSS.
+- **Toast Notifications**: User-friendly notifications using react-hot-toast.
+- **Back to Top**: Smooth scroll functionality for better UX.
 
 ### Backend
 - **User Authentication**: Register and log in with secure password hashing and JWT-based authentication.
@@ -25,9 +28,12 @@ The frontend is located in the `frontend` folder and has the following structure
 frontend/
 ├── src/
 │   ├── components/
+│   │   ├── BackToTop.jsx
 │   │   ├── ControlsBar.jsx
 │   │   ├── CountryCard.jsx
-│   │   └── Header.jsx
+│   │   ├── Globe.jsx
+│   │   ├── Header.jsx
+│   │   └── ProtectedRoute.jsx
 │   ├── pages/
 │   │   ├── CountryDetail.jsx
 │   │   ├── Favorites.jsx
@@ -37,11 +43,20 @@ frontend/
 │   ├── services/
 │   │   ├── auth.js
 │   │   ├── countries.js
-│   │   └── favorites.js
+│   │   ├── favorites.js
+│   │   └── fetchWithAuth.js
+│   ├── utils/
+│   │   └── handleAuthError.js
 │   ├── App.jsx
 │   ├── index.js
-│   └── index.css
+│   ├── index.css
+│   └── setupTests.js
+├── public/
+│   ├── index.html
+│   ├── manifest.json
+│   └── favicon.ico
 ├── package.json
+├── postcss.config.js
 └── tailwind.config.js
 ```
 
@@ -97,7 +112,12 @@ backend/
     ```bash
     npm install
     ```
-3. Start the frontend development server:
+3. Create a `.env` file in the `frontend` folder with the following variables:
+    ```
+    PORT=3001
+    REACT_APP_API_URL=https://rest-countries-api-hosted-production.up.railway.app
+    ```
+4. Start the frontend development server:
     ```bash
     npm start
     ```
@@ -117,12 +137,21 @@ backend/
 
 ---
 
+## Deployment URLs
+
+- **Frontend**: [https://rest-countries-explorer-kappa.vercel.app](https://rest-countries-explorer-kappa.vercel.app) 
+- **Backend (API Base URL)**: [https://rest-countries-api-hosted-production.up.railway.app](https://rest-countries-api-hosted-production.up.railway.app/)  
+
+---
+
 ## Technologies Used
 
 ### Frontend
 - React
 - React Router
 - Tailwind CSS
+- amCharts 5
+- React Hot Toast
 
 ### Backend
 - Node.js
@@ -146,6 +175,8 @@ backend/
 ## License
 This project is licensed under the MIT License.
 
+<!--
 ---
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/mNaxAqQD)
+-->

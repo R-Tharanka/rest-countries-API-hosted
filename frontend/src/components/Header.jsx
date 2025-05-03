@@ -63,7 +63,7 @@ export default function Header() {
               👤
             </button>
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10">
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10 dropdown-animation">
                 {/* Greeting message */}
                 <p className="px-4 py-2 border-b">👋 Hello, {user}</p>
                 {/* Logout button */}
