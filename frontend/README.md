@@ -59,7 +59,12 @@ src/
    Create a `.env` file in the project root with:
    ```
    PORT=3001
+   REACT_APP_API_URL=https://rest-countries-api-hosted-production.up.railway.app/
    ```
+
+   Environment Variables:
+   - `PORT`: The port number for the development server (default: 3001)
+   - `REACT_APP_API_URL`: The base URL for the REST Countries API
 
 3. **Development**
    ```bash
