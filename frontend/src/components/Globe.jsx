@@ -34,6 +34,7 @@ export default function Globe() {
         const backgroundSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {}));
         backgroundSeries.mapPolygons.template.setAll({
             fill: am5.color(0xe6e6e6), // Light gray background
+            fillOpacity: 0.5,
             strokeOpacity: 0, // No border
         });
         backgroundSeries.data.push({
