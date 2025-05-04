@@ -5,7 +5,11 @@ module.exports = {
 
   // Extend the default theme configuration
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'deep-teal': '#024950',
+      },
+    },
   },
 
   // Add any Tailwind CSS plugins here

@@ -36,8 +36,8 @@ export default function ControlsBar({ onSearch, onFilter }) {
   }, []);
 
   return (
-    <div className="md:h-[380px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end md:bg-gray-200
-    lg:h-[460px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:bg-gray-200
+    <div className="md:h-[380px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end md:deep-teal
+    lg:h-[460px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:deep-teal
     sm:h-[300px]">
       {/* Header section with dynamic text and optional Globe animation */}
       <div className="text-center lg:text-left px-4 lg:px-0 mt-12">
