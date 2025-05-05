@@ -71,23 +71,23 @@ export default function ControlsBar({ onSearch, onFilter }) {
 
         {/* Search and filter controls */}
         <div className="mt-12 mb-8 px-4">
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-between items-center max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-evenly items-center max-w-6xl mx-auto">
             {/* Search input with frosted‑glass */}
             <div className="relative w-full md:w-1/2">
               <input
                 type="text"
                 placeholder=" Search for a country..."
                 className="
-          w-full
-          py-2 pl-10 pr-4
-          bg-white/20
-          backdrop-blur-sm
-          border border-white/30
-          text-white placeholder-white/70
-          rounded-md
-          focus:outline-none focus:ring-2 focus:ring-blue-400
-          transition-shadow shadow-md
-        "
+                            w-full
+                            py-2 pl-10 pr-4
+                            bg-white/20
+                            backdrop-blur-sm
+                            border border-white/30
+                            text-white placeholder-white/70
+                            rounded-md
+                            focus:outline-none focus:ring-2 focus:ring-blue-400
+                            transition-shadow shadow-md
+                          "
                 onChange={(e) => onSearch(e.target.value)}
               />
               <span className="absolute left-3 top-2.5 text-white/70">🔍</span>
@@ -97,15 +97,15 @@ export default function ControlsBar({ onSearch, onFilter }) {
             <select
               id="region-filter"
               className="
-        w-full md:w-[180px]
-        py-2 px-3
-        bg-white/80
-        text-gray-900
-        rounded-md
-        shadow-md
-        focus:outline-none focus:ring-2 focus:ring-blue-400
-        transition
-      "
+                          w-full md:w-[139px]
+                          py-2 px-3
+                          bg-white/80
+                          text-gray-900
+                          rounded-md
+                          shadow-md
+                          focus:outline-none focus:ring-2 focus:ring-blue-400
+                          transition
+                        "
               onChange={(e) => handleRegionChange(e.target.value)}
             >
               <option value="">🌍 Region</option>
@@ -120,15 +120,15 @@ export default function ControlsBar({ onSearch, onFilter }) {
             <select
               id="language-filter"
               className="
-        w-full md:w-[200px]
-        py-2 px-3
-        bg-white/80
-        text-gray-900
-        rounded-md
-        shadow-md
-        focus:outline-none focus:ring-2 focus:ring-blue-400
-        transition
-      "
+                        w-full md:w-[139px]
+                        py-2 px-3
+                        bg-white/80
+                        text-gray-900
+                        rounded-md
+                        shadow-md
+                        focus:outline-none focus:ring-2 focus:ring-blue-400
+                        transition
+                      "
               onChange={(e) => handleLanguageChange(e.target.value)}
             >
               <option value="">🗣️ Language</option>
