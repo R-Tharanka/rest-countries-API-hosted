@@ -62,49 +62,85 @@ export default function ControlsBar({ onSearch, onFilter }) {
             )}
           </div>
           <p
-            className="text-gray-600 text-base sm:text-lg lg:ml-[140px] md:ml-[90px] lg:text-xl max-w-2xl lg:mx-0 text-left sm:text-center"
-            style={{ fontFamily: 'Roboto', color: '#eee'  }}
+            className="text-gray-600 text-base sm:text-lg lg:ml-[140px] md:ml-[90px] lg:text-xl max-w-2xl lg:mx-0 text-left sm:text-center md:relative md:top-[-10px]"
+            style={{ fontFamily: 'Roboto', color: '#eee' }}
           >
             Browse countries, explore their cultures, and find your favorites.
           </p>
         </div>
 
         {/* Search and filter controls */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-evenly mt-10 mb-6 mx-4">
-          {/* Search input */}
-          <input
-            type="text"
-            placeholder="Search for a country..."
-            className="w-full md:w-1/3 p-2 border rounded-[6px] shadow"
-            onChange={(e) => onSearch(e.target.value)} // Trigger onSearch callback with input value
-          />
-          {/* Region filter dropdown */}
-          <select
-            id="region-filter"
-            className="w-full md:w-[150px] p-2 border rounded-[6px] shadow"
-            onChange={(e) => handleRegionChange(e.target.value)} // Trigger region filter change
-          >
-            <option value="">Filter by Region</option>
-            <option value="Africa">Africa</option>
-            <option value="Americas">Americas</option>
-            <option value="Asia">Asia</option>
-            <option value="Europe">Europe</option>
-            <option value="Oceania">Oceania</option>
-          </select>
-          {/* Language filter dropdown */}
-          <select
-            id="language-filter"
-            className="w-full md:w-[170px] p-2 border rounded-[6px] shadow"
-            onChange={(e) => handleLanguageChange(e.target.value)} // Trigger language filter change
-          >
-            <option value="">Filter by Language</option>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="Arabic">Arabic</option>
-            <option value="Chinese">Chinese</option>
-          </select>
+        <div className="mt-12 mb-8 px-4">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-between items-center max-w-6xl mx-auto">
+            {/* Search input with frosted‑glass */}
+            <div className="relative w-full md:w-1/2">
+              <input
+                type="text"
+                placeholder=" Search for a country..."
+                className="
+          w-full
+          py-2 pl-10 pr-4
+          bg-white/20
+          backdrop-blur-sm
+          border border-white/30
+          text-white placeholder-white/70
+          rounded-md
+          focus:outline-none focus:ring-2 focus:ring-blue-400
+          transition-shadow shadow-md
+        "
+                onChange={(e) => onSearch(e.target.value)}
+              />
+              <span className="absolute left-3 top-2.5 text-white/70">🔍</span>
+            </div>
+
+            {/* Region filter */}
+            <select
+              id="region-filter"
+              className="
+        w-full md:w-[180px]
+        py-2 px-3
+        bg-white/80
+        text-gray-900
+        rounded-md
+        shadow-md
+        focus:outline-none focus:ring-2 focus:ring-blue-400
+        transition
+      "
+              onChange={(e) => handleRegionChange(e.target.value)}
+            >
+              <option value="">🌍 Region</option>
+              <option value="Africa">Africa</option>
+              <option value="Americas">Americas</option>
+              <option value="Asia">Asia</option>
+              <option value="Europe">Europe</option>
+              <option value="Oceania">Oceania</option>
+            </select>
+
+            {/* Language filter */}
+            <select
+              id="language-filter"
+              className="
+        w-full md:w-[200px]
+        py-2 px-3
+        bg-white/80
+        text-gray-900
+        rounded-md
+        shadow-md
+        focus:outline-none focus:ring-2 focus:ring-blue-400
+        transition
+      "
+              onChange={(e) => handleLanguageChange(e.target.value)}
+            >
+              <option value="">🗣️ Language</option>
+              <option value="English">English</option>
+              <option value="Spanish">Spanish</option>
+              <option value="French">French</option>
+              <option value="Arabic">Arabic</option>
+              <option value="Chinese">Chinese</option>
+            </select>
+          </div>
         </div>
+
       </div>
     </div>
   );
