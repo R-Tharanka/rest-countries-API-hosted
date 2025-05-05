@@ -37,9 +37,9 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between py-4 px-4 bg-white shadow">
+    <header className="sticky top-0 z-50 flex items-center justify-between py-4 px-4 bg-white shadow" style={{ backgroundColor: '#e0e7ea' }}>
       {/* Application title */}
-      <Link to="/" className="text-2xl font-bold">REST Countries Explorer</Link>
+      <Link to="/" className="text-2xl font-bold text-[#12445B]">REST Countries Explorer</Link>
 
       {/* Conditional rendering based on user authentication */}
       {!user ? (
@@ -50,7 +50,7 @@ export default function Header() {
       ) : (
         <div className="flex items-center gap-4">
           {/* Link to favorites page */}
-          <Link to="/favorites" className="px-4 py-2 rounded shadow hover:bg-gray-100">
+          <Link to="/favorites" className="px-4 py-2 rounded shadow text-[#000000] bg-[#fff] hover:bg-[#134A56] hover:text-[#ffffff]">
             Favorites
           </Link>
 
@@ -58,7 +58,7 @@ export default function Header() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown visibility
-              className="px-4 py-2 rounded shadow hover:bg-gray-100"
+              className="px-4 py-2 rounded shadow bg-[#fff] hover:bg-[#134A56] hover:text-[#ffffff]"
             >
               👤
             </button>

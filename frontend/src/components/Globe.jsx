@@ -89,7 +89,7 @@ export default function Globe() {
         <div
             id="chartdiv"
             ref={chartRef} // Attach the chart container reference
-            className="md:w-40 md:h-40 lg:w-60 lg:h-60 ml-2" // Responsive styling
+            className="md:w-40 md:h-40 lg:w-60 lg:h-60 " // Responsive styling
         />
     );
 }

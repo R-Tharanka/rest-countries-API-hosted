@@ -47,7 +47,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
       <div className="relative">
         {/* Header section with dynamic text and optional Globe animation */}
         <div className="text-center lg:text-left px-4 lg:px-0 mt-12">
-          <div className="flex items-center">
+          <div className="flex items-center justify-around ">
             <h1
               className="text-3xl sm:text-4xl lg:text-5xl lg:ml-[140px] md:ml-[90px] font-extrabold mb-4 sm:text-center"
               style={{ fontFamily: 'Roboto', color: '#fff' }}
