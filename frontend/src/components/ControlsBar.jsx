@@ -40,7 +40,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
     <div
       className="relative md:h-[380px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end md:deep-teal
     lg:h-[460px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:deep-teal
-    sm:h-[300px]"
+    sm:h-[340px] sm:flex sm:flex-col sm:items-center"
       style={{ backgroundImage: `url(${heroImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       {/* <div className="absolute inset-0" style={{ backgroundColor: '#112D4E', opacity: 0.1 }}></div> */}
