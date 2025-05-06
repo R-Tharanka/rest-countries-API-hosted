@@ -72,7 +72,9 @@ export default function Header() {
                     <p className="px-4 py-2 text-gray-800 border-b border-gray-100">Hello, <span className="font-medium">{user}</span></p>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+                      className="relative w-full text-left px-4 py-2 text-gray-700 transition-all duration-300 hover:text-blue-600
+             after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-blue-600
+             after:transition-all after:duration-300 hover:after:w-full after:content-['']"
                     >
                       Logout
                     </button>
