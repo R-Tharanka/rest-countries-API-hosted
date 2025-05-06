@@ -10,14 +10,14 @@ export default function Header() {
   const dropdownRef = useRef();
   const navigate = useNavigate();
 
-  // Sync `user` state with localStorage
+  // Sync user state
   useEffect(() => {
-    const handleStorage = () => setUser(localStorage.getItem('user'));
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    const onStorage = () => setUser(localStorage.getItem('user'));
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
   }, []);
 
-  // Close dropdown on outside click
+  // Close dropdown on outside clicks
   useEffect(() => {
     const onClickOutside = e => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -34,35 +34,32 @@ export default function Header() {
     navigate('/');
   };
 
-  // Morphing hamburger icon
+  // Just the three bars—no <button> here
   function HamburgerIcon({ isOpen }) {
     return (
-      <button
-        aria-label="Toggle menu"
-        className="relative w-6 h-6 focus:outline-none"
-      >
+      <>
         <span
           className={`
             block absolute h-0.5 w-full bg-gray-700
-            transition-all duration-300
+            transition-transform duration-300 ease-in-out
             ${isOpen ? 'rotate-45 top-2.5' : 'top-1'}
           `}
         />
         <span
           className={`
             block absolute h-0.5 w-full bg-gray-700
-            transition-all duration-300
-            ${isOpen ? 'opacity-0' : 'top-2.5'}
+            transition-opacity duration-200
+            ${isOpen ? 'opacity-0' : 'opacity-100 top-2.5'}
           `}
         />
         <span
           className={`
             block absolute h-0.5 w-full bg-gray-700
-            transition-all duration-300
+            transition-transform duration-300 ease-in-out
             ${isOpen ? '-rotate-45 top-2.5' : 'top-4'}
           `}
         />
-      </button>
+      </>
     );
   }
 
@@ -70,11 +67,11 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-50 bg-white/60 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:py-4">
-          
-          {/* Logo / Title with subtle scale on hover */}
+
+          {/* Logo with subtle scale */}
           <Link
             to="/"
-            className="flex items-center space-x-2 hover:scale-105 transition-transform"
+            className="flex items-center space-x-2 hover:scale-[1.02] transition-transform duration-150"
           >
             <GlobeAltIcon className="h-8 w-8 text-blue-600" />
             <span className="text-2xl font-extrabold text-[#12445b]">
@@ -115,9 +112,7 @@ export default function Header() {
                       </p>
                       <button
                         onClick={handleLogout}
-                        className="relative w-full text-left px-4 py-2 text-gray-700 transition-all duration-300 hover:text-blue-600
-                                after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-blue-600
-                                after:transition-all after:duration-300 hover:after:w-full after:ease-in-out after:content-['']"
+                        className="w-full text-left px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-100 hover:rounded-md transition"
                       >
                         Logout
                       </button>
@@ -128,12 +123,35 @@ export default function Header() {
             )}
           </nav>
 
-          {/* Mobile hamburger */}
-          <div className="md:hidden">
-            <button onClick={() => setDrawerOpen(o => !o)}>
-              <HamburgerIcon isOpen={drawerOpen} />
-            </button>
-          </div>
+          {/* Mobile hamburger (single button) */}
+          <button
+            className="relative md:hidden w-6 h-6 focus:outline-none"
+            onClick={() => setDrawerOpen(o => !o)}
+          >
+            <div className="relative w-full h-full">
+              <span
+                className={`
+                  block absolute h-0.5 w-full bg-gray-700
+                  transition-all duration-300 ease-in-out
+                  ${drawerOpen ? 'rotate-45 top-2.5' : 'top-1'}
+                `}
+              />
+              <span
+                className={`
+                  block absolute h-0.5 w-full bg-gray-700
+                  transition-all duration-300 ease-in-out
+                  ${drawerOpen ? 'opacity-0 top-2.5' : 'opacity-100 top-2.5'}
+                `}
+              />
+              <span
+                className={`
+                  block absolute h-0.5 w-full bg-gray-700
+                  transition-all duration-300 ease-in-out
+                  ${drawerOpen ? '-rotate-45 top-2.5' : 'top-4'}
+                `}
+              />
+            </div>
+          </button>
         </div>
       </header>
 
@@ -169,7 +187,10 @@ export default function Header() {
                 Hello, <span className="font-medium">{user}</span>
               </p>
               <button
-                onClick={() => { setDrawerOpen(false); handleLogout(); }}
+                onClick={() => {
+                  setDrawerOpen(false);
+                  handleLogout();
+                }}
                 className="w-full text-left px-4 py-2 rounded-md text-gray-700 hover:text-red-600 hover:bg-gray-100 transition"
               >
                 Logout

@@ -40,7 +40,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
     <div
       className="relative md:h-[380px] md:pb-5 md:flex md:items-stretch md:flex-col md:justify-end md:deep-teal
     lg:h-[460px] lg:pb-5 lg:flex lg:items-stretch lg:flex-col lg:justify-end lg:deep-teal
-    sm:h-[340px] sm:flex sm:flex-col sm:items-center"
+    sm:h-[360px] sm:flex sm:flex-col sm:items-center"
       style={{ backgroundImage: `url(${heroImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       {/* <div className="absolute inset-0" style={{ backgroundColor: '#112D4E', opacity: 0.1 }}></div> */}
@@ -49,7 +49,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
         <div className="text-center lg:text-left px-4 lg:px-0 mt-12">
           <div className="flex items-center justify-around ">
             <h1
-              className="text-3xl sm:text-4xl lg:text-5xl lg:ml-[140px] md:ml-[90px] font-extrabold mb-4 sm:text-center"
+              className="text-3xl sm:text-4xl mt-[20px] sm:mt-[0] lg:text-5xl lg:ml-[140px] md:ml-[90px] font-extrabold mb-4 sm:text-center"
               style={{ fontFamily: 'Roboto', color: '#fff' }}
             >
               {text} {/* Dynamically typed text */}

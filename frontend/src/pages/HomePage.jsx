@@ -104,7 +104,7 @@ export default function HomePage() {
     <div>
       {/* Header component */}
       <Header />
-      <div className="mx-auto">
+      <div className="mt-[-48px] sm:mt-0 mx-auto">
         {/* ControlsBar for search and filter */}
         <ControlsBar
           onSearch={handleSearch} // Pass search handler
