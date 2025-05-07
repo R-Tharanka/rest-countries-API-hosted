@@ -8,15 +8,17 @@ import {
   ArrowRightIcon
 } from '@heroicons/react/24/outline';
 
+// CountryCard component displays a card with country details
 export default function CountryCard({
-  flag,
-  name,
-  population,
-  region,
-  capital,
-  code
+  flag, // URL of the country's flag image
+  name, // Name of the country
+  population, // Population of the country
+  region, // Region the country belongs to
+  capital, // Capital city of the country
+  code // Country code used for routing
 }) {
   return (
+    // Link wraps the entire card and navigates to the country details page
     <Link to={`/country/${code}`} className="block">
       <div
         className="
@@ -25,14 +27,14 @@ export default function CountryCard({
           flex flex-col h-full
         "
       >
-        {/* Flag with “holographic” wave overlay */}
+        {/* Flag section with a “holographic” wave overlay */}
         <div className="relative group overflow-hidden">
           <img
             src={flag}
-            alt={`${name} flag`}
+            alt={`${name} flag`} // Accessible alt text for the flag image
             className="h-40 w-full object-cover"
           />
-          {/* gradient overlay that “waves” down on hover */}
+          {/* Gradient overlay that animates on hover */}
           <div
             className="
               absolute -top-[50%] -left-[50%] w-[200%] h-[200%]
@@ -46,9 +48,9 @@ export default function CountryCard({
           />
         </div>
 
-        {/* Card body */}
+        {/* Card body containing country details */}
         <div className="p-6 flex-1 flex flex-col">
-          {/* Title + icon */}
+          {/* Country name with an icon */}
           <h3 className="flex items-center justify-between text-xl font-semibold mb-2">
             {name}
             <GlobeAltIcon className="w-5 h-5 text-green-500" />
@@ -59,19 +61,21 @@ export default function CountryCard({
             {region}
           </span>
 
-          {/* Details */}
+          {/* List of additional details */}
           <ul className="flex-1 space-y-2 text-gray-700">
+            {/* Capital city */}
             <li className="flex items-center">
               <MapPinIcon className="w-5 h-5 text-blue-500 mr-2" />
-              {capital || '—'}
+              {capital || '—'} {/* Display '—' if capital is not available */}
             </li>
+            {/* Population */}
             <li className="flex items-center">
               <UsersIcon className="w-5 h-5 text-indigo-500 mr-2" />
-              {population.toLocaleString()}
+              {population.toLocaleString()} {/* Format population with commas */}
             </li>
           </ul>
 
-          {/* CTA */}
+          {/* Call-to-action button */}
           <button className="mt-4 inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
             See details <ArrowRightIcon className="w-4 h-4 ml-1" />
           </button>
