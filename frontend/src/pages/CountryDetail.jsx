@@ -1,3 +1,4 @@
+// src/pages/CountryDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -5,151 +6,187 @@ import { fetchByAlpha } from '../services/countries';
 import Header from '../components/Header';
 import { addFavorite, removeFavorite } from '../services/favorites';
 import { handleAuthError } from '../utils/handleAuthError';
+import {
+  ChevronLeftIcon,
+  MapPinIcon,
+  UsersIcon
+} from '@heroicons/react/24/outline';
+import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 
 export default function CountryDetail() {
-  const { code } = useParams(); // Get the country code from the URL parameters
-  const navigate = useNavigate(); // Hook for programmatic navigation
-
-  const [country, setCountry] = useState(null); // State to store country details
-  const [loading, setLoading] = useState(true); // State to track loading status
-  const [error, setError] = useState(''); // State to store error messages
-  const [sessionExpired, setSessionExpired] = useState(false); // State to track session expiration
-
-  const user = localStorage.getItem('user'); // Get the logged-in user from localStorage
-  const [isFavorite, setIsFavorite] = useState(false); // State to track if the country is a favorite
+  const { code } = useParams();
+  const navigate = useNavigate();
+  const [country, setCountry] = useState(null);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState('');
+  const [sessionExpired, setSessionExpired] = useState(false);
+  const user = localStorage.getItem('user');
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const getCountry = async () => {
       try {
-        // Fetch country details by code
         const data = await fetchByAlpha(code);
         setCountry(data[0]);
-
-        // Check if the country is in the user's favorites
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        setIsFavorite(favorites.includes(code));
-      } catch (err) {
-        setError('Failed to fetch country details'); // Set error message if fetch fails
+        const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+        setIsFavorite(favs.includes(code));
+      } catch {
+        setError('Failed to load country data.');
       } finally {
-        setLoading(false); // Stop loading spinner
+        setLoading(false);
       }
     };
-
     getCountry();
-  }, [code]); // Re-run effect when the country code changes
+  }, [code]);
 
   const handleFavoriteToggle = async () => {
     try {
-      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      let updatedFavorites;
-
+      const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+      let updated;
       if (isFavorite) {
-        // Remove from favorites
-        updatedFavorites = favorites.filter(fav => fav !== code);
+        updated = favs.filter(f => f !== code);
         await removeFavorite(code, navigate, setSessionExpired);
       } else {
-        // Add to favorites
-        updatedFavorites = [...favorites, code];
+        updated = [...favs, code];
         await addFavorite(code, navigate, setSessionExpired);
       }
-
-      // Update localStorage and state
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      localStorage.setItem('favorites', JSON.stringify(updated));
       setIsFavorite(!isFavorite);
-
-      // Show success toast
       toast.success(isFavorite ? 'Removed from favorites' : 'Added to favorites');
     } catch (err) {
-      console.error(err.message); // Log error if toggle fails
+      handleAuthError(err, navigate, setSessionExpired);
     }
   };
 
-  // Render loading, error, or "not found" messages
-  if (loading) return <p className="p-4">Loading country...</p>;
-  if (error) return <p className="text-red-500 p-4">{error}</p>;
-  if (!country) return <p className="p-4">Country not found</p>;
+  if (loading) return <p className="p-6 text-center text-gray-600">Loading…</p>;
+  if (error)   return <p className="p-6 text-center text-red-500">{error}</p>;
+  if (!country) return <p className="p-6 text-center">Country not found.</p>;
 
   return (
-    <div>
-      <Header /> {/* Render the header component */}
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+
       {sessionExpired && (
-        <div className="bg-yellow-100 text-yellow-800 text-center p-2 text-sm">
+        <div className="bg-yellow-100 text-yellow-800 text-center py-2 animate-fade-up">
           Session expired. Please log in again.
         </div>
       )}
-      <div className="p-4 max-w-4xl mx-auto fade-in">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 mt-4 gap-2">
-          {/* Back button */}
+
+      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        {/* Navigation & Actions */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 animate-fade-up">
           <Link
             to="/"
-            className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium rounded shadow-sm transition duration-150"
+            className="inline-flex items-center px-3 py-2 bg-white rounded shadow hover:bg-gray-100 transition-transform transform hover:-translate-y-1"
           >
-            ← Back
+            <ChevronLeftIcon className="h-5 w-5 text-gray-700 mr-1" />
+            Back
           </Link>
-
-          {/* Favorite toggle button (only visible if user is logged in) */}
           {user && (
             <button
               onClick={handleFavoriteToggle}
-              className={`px-4 py-2 rounded shadow text-white ${isFavorite
-                ? 'bg-red-600 hover:bg-red-700'
-                : 'bg-gray-600 hover:bg-gray-700'
-                }`}
+              className="inline-flex items-center px-4 py-2 bg-white rounded shadow hover:bg-gray-100 transition-transform transform hover:-translate-y-1"
             >
-              {isFavorite ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
+              {isFavorite
+                ? <HeartSolid className="h-5 w-5 text-red-600 mr-2 animate-pulse" />
+                : <HeartOutline className="h-5 w-5 text-gray-600 mr-2" />
+              }
+              {isFavorite ? 'Remove Favorite' : 'Add to Favorites'}
             </button>
           )}
         </div>
 
-        {/* Country details */}
-        <h1 className="text-3xl font-bold mb-8 mt-8">{country.name.official}</h1>
-        <img src={country.flags.svg} alt={`${country.name.common} flag`} className="h-40 w-auto mb-6" />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Display various country details */}
-          <p><strong>Common Name:</strong> {country.name.common}</p>
-          <p><strong>Native Name:</strong> {
-            country.name.nativeName
-              ? Object.values(country.name.nativeName)[0].common
-              : 'N/A'
-          }</p>
-          <p><strong>Capital:</strong> {country.capital?.[0] || 'N/A'}</p>
-          <p><strong>Region:</strong> {country.region}</p>
-          <p><strong>Subregion:</strong> {country.subregion || 'N/A'}</p>
-          <p><strong>Population:</strong> {country.population.toLocaleString()}</p>
-          <p><strong>Timezones:</strong> {country.timezones?.join(', ') || 'N/A'}</p>
-          <p><strong>Start of Week:</strong> {country.startOfWeek || 'N/A'}</p>
-          <p><strong>Top Level Domain:</strong> {country.tld?.join(', ') || 'N/A'}</p>
-          <p><strong>Languages:</strong> {
-            country.languages
-              ? Object.values(country.languages).join(', ')
-              : 'N/A'
-          }</p>
-          <p><strong>Currencies:</strong> {
-            country.currencies
-              ? Object.values(country.currencies).map(c => `${c.name} (${c.symbol})`).join(', ')
-              : 'N/A'
-          }</p>
-          <p><strong>Borders:</strong> {
-            country.borders
-              ? country.borders.join(', ')
-              : 'None'
-          }</p>
+        {/* Country Header Card */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden animate-fade-up">
+          <div className="sm:flex">
+            <img
+              src={country.flags.svg}
+              alt={`${country.name.common} flag`}
+              className="w-full sm:w-1/3 h-48 object-cover"
+            />
+            <div className="p-6 flex-1">
+              <h1 className="text-3xl font-bold mb-2">{country.name.official}</h1>
+              <p className="text-gray-600">{country.name.common}</p>
+            </div>
+          </div>
         </div>
 
-        {/* Display coat of arms if available */}
-        {country.coatOfArms?.svg && (
-          <div className="mt-6">
-            <p className="font-semibold mb-2">Coat of Arms:</p>
-            <img src={country.coatOfArms.svg} alt={`${country.name.common} coat of arms`} className="h-32 w-auto" />
+        {/* Key Facts */}
+        <section className="bg-white rounded-lg shadow-md p-6 animate-fade-up">
+          <h2 className="text-2xl font-semibold mb-4 border-b pb-2">Key Facts</h2>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Capital</dt>
+              <dd className="flex items-center mt-1 text-gray-800">
+                <MapPinIcon className="h-5 w-5 text-blue-500 mr-2" />
+                {country.capital?.[0] || 'N/A'}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Population</dt>
+              <dd className="flex items-center mt-1 text-gray-800">
+                <UsersIcon className="h-5 w-5 text-indigo-500 mr-2" />
+                {country.population.toLocaleString()}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Region</dt>
+              <dd className="mt-1 text-gray-800">{country.region}</dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Subregion</dt>
+              <dd className="mt-1 text-gray-800">{country.subregion || 'N/A'}</dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Languages</dt>
+              <dd className="mt-1 text-gray-800">
+                {country.languages
+                  ? Object.values(country.languages).join(', ')
+                  : 'N/A'}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Currencies</dt>
+              <dd className="mt-1 text-gray-800">
+                {country.currencies
+                  ? Object.values(country.currencies)
+                      .map(c => `${c.name} (${c.symbol})`)
+                      .join(', ')
+                  : 'N/A'}
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        {/* More Details */}
+        <section className="bg-white rounded-lg shadow-md p-6 animate-fade-up">
+          <h2 className="text-2xl font-semibold mb-4 border-b pb-2">More Details</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-800">
+            <p><strong>Timezones:</strong> {country.timezones.join(', ')}</p>
+            <p><strong>Start of Week:</strong> {country.startOfWeek}</p>
+            <p><strong>Top Level Domain:</strong> {country.tld?.join(', ') || 'N/A'}</p>
+            <p><strong>Borders:</strong> {country.borders?.join(', ') || 'None'}</p>
           </div>
+        </section>
+
+        {/* Coat of Arms */}
+        {country.coatOfArms?.svg && (
+          <section className="bg-white rounded-lg shadow-md p-6 animate-fade-up">
+            <h2 className="text-2xl font-semibold mb-4 border-b pb-2">Coat of Arms</h2>
+            <img
+              src={country.coatOfArms.svg}
+              alt={`${country.name.common} coat of arms`}
+              className="h-32 w-auto mx-auto"
+            />
+          </section>
         )}
 
-        {/* Display map location if coordinates are available */}
+        {/* Map */}
         {country.latlng && (
-          <div className="mt-10">
-            <p className="text-lg font-semibold mb-2">Location on Map:</p>
-            <div className="w-full h-96 rounded overflow-hidden shadow-lg">
+          <section className="bg-white rounded-lg shadow-md p-6 animate-fade-up">
+            <h2 className="text-2xl font-semibold mb-4 border-b pb-2">Location</h2>
+            <div className="w-full h-96 rounded overflow-hidden">
               <iframe
                 title={`${country.name.common} location`}
                 width="100%"
@@ -158,11 +195,11 @@ export default function CountryDetail() {
                 loading="lazy"
                 allowFullScreen
                 src={`https://maps.google.com/maps?q=${country.latlng[0]},${country.latlng[1]}&z=5&output=embed`}
-              ></iframe>
+              />
             </div>
-          </div>
+          </section>
         )}
-      </div>
+      </main>
     </div>
   );
 }
