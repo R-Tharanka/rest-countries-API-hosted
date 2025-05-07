@@ -60,6 +60,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
                 <Globe /> {/* Globe animation */}
               </div>
             )}
+            
           </div>
           <p
             className="text-gray-600 text-base sm:text-lg lg:ml-[140px] md:ml-[90px] lg:text-xl max-w-2xl lg:mx-0 text-left sm:text-center md:relative md:top-[-10px]"
@@ -71,7 +72,7 @@ export default function ControlsBar({ onSearch, onFilter }) {
 
         {/* Search and filter controls */}
         <div className="mt-12 mb-8 px-4">
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-evenly items-center max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-evenly md:items-center sm:items-stretch max-w-6xl mx-auto">
             {/* Search input with frosted‑glass */}
             <div className="relative w-full md:w-1/2">
               <input
@@ -93,10 +94,12 @@ export default function ControlsBar({ onSearch, onFilter }) {
               <span className="absolute left-3 top-2.5 text-white/70">🔍</span>
             </div>
 
-            {/* Region filter */}
-            <select
-              id="region-filter"
-              className="
+            <div className="flex justify-evenly items-center flex-row" >
+              {/* Region filter */}
+              <select
+                id="region-filter"
+                className="
+                          m-[10px]
                           w-full md:w-[139px]
                           py-2 px-3
                           bg-white/80
@@ -106,20 +109,21 @@ export default function ControlsBar({ onSearch, onFilter }) {
                           focus:outline-none focus:ring-2 focus:ring-blue-400
                           transition
                         "
-              onChange={(e) => handleRegionChange(e.target.value)}
-            >
-              <option value="">🌍 Region</option>
-              <option value="Africa">Africa</option>
-              <option value="Americas">Americas</option>
-              <option value="Asia">Asia</option>
-              <option value="Europe">Europe</option>
-              <option value="Oceania">Oceania</option>
-            </select>
+                onChange={(e) => handleRegionChange(e.target.value)}
+              >
+                <option value="">🌍 Region</option>
+                <option value="Africa">Africa</option>
+                <option value="Americas">Americas</option>
+                <option value="Asia">Asia</option>
+                <option value="Europe">Europe</option>
+                <option value="Oceania">Oceania</option>
+              </select>
 
-            {/* Language filter */}
-            <select
-              id="language-filter"
-              className="
+              {/* Language filter */}
+              <select
+                id="language-filter"
+                className="
+                        m-[10px]
                         w-full md:w-[139px]
                         py-2 px-3
                         bg-white/80
@@ -129,15 +133,16 @@ export default function ControlsBar({ onSearch, onFilter }) {
                         focus:outline-none focus:ring-2 focus:ring-blue-400
                         transition
                       "
-              onChange={(e) => handleLanguageChange(e.target.value)}
-            >
-              <option value="">🗣️ Language</option>
-              <option value="English">English</option>
-              <option value="Spanish">Spanish</option>
-              <option value="French">French</option>
-              <option value="Arabic">Arabic</option>
-              <option value="Chinese">Chinese</option>
-            </select>
+                onChange={(e) => handleLanguageChange(e.target.value)}
+              >
+                <option value="">🗣️ Language</option>
+                <option value="English">English</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+                <option value="Arabic">Arabic</option>
+                <option value="Chinese">Chinese</option>
+              </select>
+            </div>
           </div>
         </div>
 
