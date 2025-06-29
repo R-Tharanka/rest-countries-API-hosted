@@ -3,7 +3,7 @@ const BASE_URL = 'https://restcountries.com/v3.1';
 
 // Fetch all countries from the API
 export const fetchAllCountries = async () => {
-  const res = await fetch(`${BASE_URL}/all`);
+  const res = await fetch(`${BASE_URL}/all?fields=name,flags,population,region,capital,cca3,languages`);
   if (!res.ok) throw new Error('Failed to fetch countries'); // Handle fetch errors
   return await res.json(); // Return the JSON response
 };
